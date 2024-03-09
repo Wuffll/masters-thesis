@@ -1,12 +1,21 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image/stb_image.h>
+#include <string>
+#include <filesystem>
+
+#include "ImageLoader.hpp"
 
 int main(void)
 {
+    std::string workingDirectory = std::filesystem::current_path().string();
+
     GLFWwindow* window;
+
+    ImageLoader imageLoader;
+
+    imageLoader.setFilePath(workingDirectory + "\\Resources\\heightmaps\\test.png");
+    imageLoader.GetImage();
 
     /* Initialize the library */
     if (!glfwInit())
