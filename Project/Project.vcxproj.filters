@@ -18,13 +18,22 @@
     <ClCompile Include="src\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ImageLoader.cpp">
+    <ClCompile Include="src\Image.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ImageLoaderSTBI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="headers\Image.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="headers\ImageLoader.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ImageLoaderSTBI.hpp">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
