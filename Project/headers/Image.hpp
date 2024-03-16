@@ -30,7 +30,10 @@ public:
 
 	~Image();
 
-	ImageInfo GetImage();
+	void loadImage();
+
+	const ImageInfo& getImageInfo() const;
+	const unsigned char* getImageData() const;
 
 	void setFilePath(const std::string& filePath);
 	const std::string& getFilePath() const;
@@ -57,6 +60,8 @@ private:
 	* (I will probably create a Array2D to store this in a more understandable way)
 	*
 	*/
+
+	std::string m_filePath;
 
 	ImageLoader* m_pImageLoader = nullptr;
 	ImageInfo m_ImageInfo;

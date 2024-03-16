@@ -24,6 +24,9 @@
     <ClCompile Include="src\ImageLoaderSTBI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Debug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\Image.hpp">
@@ -34,6 +37,9 @@
     </ClInclude>
     <ClInclude Include="headers\ImageLoaderSTBI.hpp">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\Debug.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

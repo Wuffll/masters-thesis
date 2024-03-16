@@ -86,7 +86,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Debug.cpp" />
     <ClCompile Include="src\ImageLoaderSTBI.cpp" />
+    <ClInclude Include="headers\Debug.hpp" />
     <ClInclude Include="headers\ImageLoaderSTBI.hpp" />
     <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Main.cpp" />

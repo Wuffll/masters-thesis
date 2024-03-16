@@ -2,6 +2,7 @@
 
 #include <cassert>
 
+#include "Debug.hpp"
 #include "ImageLoaderSTBI.hpp"
 
 Image::Image()
@@ -10,17 +11,19 @@ Image::Image()
 }
 
 Image::Image(const std::string& filePath)
+	:
+	m_filePath(filePath),
+	m_pImageLoader(new ImageLoaderSTBI())
 {
-	m_pImageLoader = new ImageLoaderSTBI();
-	
-	m_pImageLoader->setFilePath(filePath.c_str());
+	loadImage();
 }
 
 Image::Image(const std::string& filePath, ImageLoader* imageLoader)
 	:
+	m_filePath(filePath),
 	m_pImageLoader(imageLoader)
 {
-	m_pImageLoader->setFilePath(filePath.c_str());
+	loadImage();
 }
 
 Image::~Image()
@@ -32,28 +35,41 @@ Image::~Image()
 		delete m_pImageLoader;
 }
 
-ImageInfo Image::GetImage()
+void Image::loadImage()
 {
 	if (!m_ImageLoaded)
 	{
 		m_ImageInfo.free();
-		m_ImageInfo = m_pImageLoader->load();
+		m_ImageInfo = m_pImageLoader->loadFromFile(m_filePath);
 
 		m_ImageLoaded = (!m_ImageInfo.m_Data) ? false : true;
 	}
 
-	assert(m_ImageLoaded && "Image not loaded!");
+	if (m_ImageLoaded)
+		Debug::printMessage("Image", "Image load success (" + m_filePath + ")!", DebugSeverityLevel::OK);
+	else
+		Debug::throwException("Image", "Unable to load image (" + m_filePath + ")!");
+}
 
+const ImageInfo& Image::getImageInfo() const
+{
 	return m_ImageInfo;
+}
+
+const unsigned char* Image::getImageData() const
+{
+	return m_ImageInfo.m_Data;
 }
 
 void Image::setFilePath(const std::string& filePath)
 {
 	m_ImageLoaded = false;
-	m_pImageLoader->setFilePath(filePath.c_str());
+
+	m_filePath.clear();
+	m_filePath.append(filePath);
 }
 
 const std::string& Image::getFilePath() const
 {
-	return m_pImageLoader->getFilePath();
+	return m_filePath;
 }
