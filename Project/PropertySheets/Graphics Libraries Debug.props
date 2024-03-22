@@ -10,8 +10,8 @@
       <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\lib\zlib;$(SolutionDir)Dependencies\lib\GLEW210;$(SolutionDir)Dependencies\lib\GLFW34;$(SolutionDir)Dependencies\lib\Assimp;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;assimp-vc143-mtd.lib;glfw3.lib;glew32s.lib;zlibstatic.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\lib\zlib;$(SolutionDir)Dependencies\lib\glew;$(SolutionDir)Dependencies\lib\glfw;$(SolutionDir)Dependencies\lib\Assimp;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32s.lib;opengl32.lib;assimp-vc143-mtd.lib;glfw3.lib;zlibstatic.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup />

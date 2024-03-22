@@ -1,7 +1,10 @@
+#define GLEW_STATIC
 #include <GLFW/glfw3.h>
+
 #include <glm/glm.hpp>
 
 #include "Image.hpp"
+#include "Debug.hpp"
 
 #include <string>
 #include <filesystem>

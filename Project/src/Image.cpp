@@ -46,9 +46,9 @@ void Image::loadImage()
 	}
 
 	if (m_ImageLoaded)
-		Debug::printMessage("Image", "Image load success (" + m_filePath + ")!", DebugSeverityLevel::OK);
+		Debug::printMessage(*this, "Image load success (" + m_filePath + ")!", DebugSeverityLevel::OK);
 	else
-		Debug::throwException("Image", "Unable to load image (" + m_filePath + ")!");
+		Debug::throwException(*this, "Unable to load image (" + m_filePath + ")!");
 }
 
 const ImageInfo& Image::getImageInfo() const
