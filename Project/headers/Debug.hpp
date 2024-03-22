@@ -26,7 +26,7 @@ public:
 
 	template<typename T>
 	static void printMessage(const T& instance, const std::string& msg, const DebugSeverityLevel& level);
-	
+
 	template<typename T>
 	static void throwException(const T& instance, const std::string& msg);
 	
