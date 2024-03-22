@@ -1,6 +1,6 @@
 #include "VertexBufferLayout.h"
 
-#include "Debug.hpp"
+#include "Debug.h"
 
 const std::vector<VertexBufferElement>& VertexBufferLayout::getElements() const
 {

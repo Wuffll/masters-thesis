@@ -3,8 +3,8 @@
 
 #include <glm/glm.hpp>
 
-#include "Image.hpp"
-#include "Debug.hpp"
+#include "Image.h"
+#include "Debug.h"
 
 #include <string>
 #include <filesystem>
@@ -12,7 +12,7 @@
 int main(void)
 {
     std::string workingDirectory = std::filesystem::current_path().string();
-    printf("Program starting ...\n");
+    printf("Program starting...\n");
     printf("Working directory: %s\n", workingDirectory.c_str());
 
     GLFWwindow* window;

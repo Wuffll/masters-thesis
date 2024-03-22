@@ -1,8 +1,11 @@
 #include "VertexBuffer.h"
 
+#ifndef GLEW_STATIC
+#define GLEW_STATIC
+#endif
 #include <GL/glew.h>
 
-#include "Debug.hpp"
+#include "Debug.h"
 
 #define INITIAL_BUFFER_SIZE 4 * 1024 * 1024 // 4 MB in bytes
 

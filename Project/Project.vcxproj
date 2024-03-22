@@ -86,14 +86,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\Debug.cpp" />
     <ClCompile Include="src\ImageLoaderSTBI.cpp" />
     <ClCompile Include="src\IndexBuffer.cpp" />
     <ClCompile Include="src\VertexBuffer.cpp" />
     <ClCompile Include="src\VertexArray.cpp" />
     <ClCompile Include="src\VertexBufferLayout.cpp" />
-    <ClInclude Include="headers\Debug.hpp" />
-    <ClInclude Include="headers\ImageLoaderSTBI.hpp" />
+    <ClInclude Include="headers\Debug.h" />
+    <ClInclude Include="headers\ImageLoaderSTBI.h" />
     <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClInclude Include="headers\IndexBuffer.h" />
@@ -101,10 +102,11 @@
     <ClInclude Include="headers\VertexBuffer.h" />
     <ClInclude Include="headers\VertexBufferLayout.h" />
     <ClInclude Include="headers\Utility.hpp" />
+    <ClInclude Include="headers\Shader.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="headers\Image.hpp" />
-    <ClInclude Include="headers\ImageLoader.hpp" />
+    <ClInclude Include="headers\Image.h" />
+    <ClInclude Include="headers\ImageLoader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

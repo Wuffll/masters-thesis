@@ -1,9 +1,9 @@
-#include "Image.hpp"
+#include "Image.h"
 
 #include <cassert>
 
-#include "Debug.hpp"
-#include "ImageLoaderSTBI.hpp"
+#include "Debug.h"
+#include "ImageLoaderSTBI.h"
 
 Image::Image()
 {

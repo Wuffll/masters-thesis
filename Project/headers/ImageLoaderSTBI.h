@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ImageLoader.hpp"
+#include "ImageLoader.h"
 
 class ImageLoaderSTBI : public ImageLoader
 {

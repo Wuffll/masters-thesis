@@ -1,6 +1,6 @@
 #include "VertexArray.h"
 
-#include "Debug.hpp"
+#include "Debug.h"
 
 VertexArray::VertexArray()
 	:
