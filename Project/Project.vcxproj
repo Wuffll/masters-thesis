@@ -86,20 +86,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\IndexBufferGL.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\Debug.cpp" />
     <ClCompile Include="src\ImageLoaderSTBI.cpp" />
-    <ClCompile Include="src\IndexBuffer.cpp" />
-    <ClCompile Include="src\VertexBuffer.cpp" />
     <ClCompile Include="src\VertexArray.cpp" />
+    <ClCompile Include="src\VertexBufferGL.cpp" />
     <ClCompile Include="src\VertexBufferLayout.cpp" />
     <ClInclude Include="headers\Debug.h" />
     <ClInclude Include="headers\ImageLoaderSTBI.h" />
     <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClInclude Include="headers\IndexBuffer.h" />
+    <ClInclude Include="headers\IndexBufferGL.h" />
     <ClInclude Include="headers\VertexArray.h" />
     <ClInclude Include="headers\VertexBuffer.h" />
+    <ClInclude Include="headers\VertexBufferGL.h" />
     <ClInclude Include="headers\VertexBufferLayout.h" />
     <ClInclude Include="headers\Utility.hpp" />
     <ClInclude Include="headers\Shader.h" />
@@ -107,6 +109,9 @@
   <ItemGroup>
     <ClInclude Include="headers\Image.h" />
     <ClInclude Include="headers\ImageLoader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\shaders\default.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

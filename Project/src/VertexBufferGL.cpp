@@ -1,4 +1,4 @@
-#include "VertexBuffer.h"
+#include "VertexBufferGL.h"
 
 #ifndef GLEW_STATIC
 #define GLEW_STATIC
@@ -9,18 +9,18 @@
 
 #define INITIAL_BUFFER_SIZE 4 * 1024 * 1024 // 4 MB in bytes
 
-unsigned int VertexBuffer::__boundVBO = 0;
+unsigned int VertexBufferGL::__boundVBO = 0;
 
-VertexBuffer::VertexBuffer()
+VertexBufferGL::VertexBufferGL()
 	:
 	m_Usage(GL_STATIC_DRAW)
 {
 	glGenBuffers(1, &m_RendererID);
 
-	Debug::printMessage(*this, "VertexBuffer created without any data! (mRendererID = " + STRING(m_RendererID) + ")", DebugSeverityLevel::MEDIUM);
+	Debug::printMessage(*this, "VertexBufferGL created without any data! (mRendererID = " + STRING(m_RendererID) + ")", DebugSeverityLevel::MEDIUM);
 }
 
-VertexBuffer::VertexBuffer(const void* data, const unsigned int& size, unsigned int usage)
+VertexBufferGL::VertexBufferGL(const void* data, const unsigned int& size, unsigned int usage)
 	:
 	m_Initialized(true),
 	m_Usage(usage)
@@ -31,13 +31,13 @@ VertexBuffer::VertexBuffer(const void* data, const unsigned int& size, unsigned 
 	fillBuffer(data, size, usage);
 }
 
-VertexBuffer::~VertexBuffer()
+VertexBufferGL::~VertexBufferGL()
 {
 	Debug::printMessage(*this, "Vertex buffer " + STRING(m_RendererID) + " destroyed!", DebugSeverityLevel::OK);
 	glDeleteBuffers(1, &m_RendererID);
 }
 
-void VertexBuffer::fillBuffer(const void* data, const unsigned int& size, unsigned int usage)
+void VertexBufferGL::fillBuffer(const void* data, const unsigned int& size, unsigned int usage)
 {
 	if (usage != m_Usage)
 		Debug::printMessage(*this, "Inserted usage type is different from the member usage type! (mRendererID = " + STRING(m_RendererID) + ")", DebugSeverityLevel::HIGH);
@@ -49,7 +49,7 @@ void VertexBuffer::fillBuffer(const void* data, const unsigned int& size, unsign
 	m_Initialized = true;
 }
 
-void VertexBuffer::insertDataWithOffset(const void* data, const unsigned int& size, const unsigned int& offset)
+void VertexBufferGL::insertDataWithOffset(const void* data, const unsigned int& size, const unsigned int& offset)
 {
 	bind();
 	adjustBufferSize(offset + size, m_Usage);
@@ -59,7 +59,7 @@ void VertexBuffer::insertDataWithOffset(const void* data, const unsigned int& si
 	m_BufferSize = (offset + size > m_BufferSize) ? offset + size : m_BufferSize;
 }
 
-unsigned int VertexBuffer::appendData(const void* data, const unsigned int& size)
+unsigned int VertexBufferGL::appendData(const void* data, const unsigned int& size)
 {
 	auto offset = m_BufferSize;
 
@@ -71,7 +71,7 @@ unsigned int VertexBuffer::appendData(const void* data, const unsigned int& size
 	return offset;
 }
 
-void VertexBuffer::adjustBufferSize(const unsigned int& newSize, const unsigned int& usage)
+void VertexBufferGL::adjustBufferSize(const unsigned int& newSize, const unsigned int& usage)
 {
 	bool sizeChanged = false;
 
@@ -105,32 +105,32 @@ void VertexBuffer::adjustBufferSize(const unsigned int& newSize, const unsigned 
 	}
 }
 
-const bool& VertexBuffer::isInitialized() const
+const bool& VertexBufferGL::isInitialized() const
 {
 	return m_Initialized;
 }
 
-const unsigned int& VertexBuffer::getRendererID() const
+const unsigned int& VertexBufferGL::getRendererID() const
 {
 	return m_RendererID;
 }
 
-const unsigned int& VertexBuffer::getBufferCapacity() const
+const unsigned int& VertexBufferGL::getBufferCapacity() const
 {
 	return m_BufferCapacity;
 }
 
-const unsigned int& VertexBuffer::getBufferSize() const
+const unsigned int& VertexBufferGL::getBufferSize() const
 {
 	return m_BufferSize;
 }
 
-const unsigned int& VertexBuffer::getOffset() const
+const unsigned int& VertexBufferGL::getOffset() const
 {
 	return m_BufferSize;
 }
 
-void VertexBuffer::bind() const
+void VertexBufferGL::bind() const
 {
 	if (!m_Initialized)
 	{
@@ -146,12 +146,12 @@ void VertexBuffer::bind() const
 	__boundVBO = m_RendererID;
 }
 
-void VertexBuffer::bind(const unsigned int& bindingIndex, const VertexBufferLayout& layout) const
+void VertexBufferGL::bind(const unsigned int& bindingIndex, const VertexBufferLayout& layout) const
 {
 	glBindVertexBuffer(bindingIndex, m_RendererID, 0, layout.getStride());
 }
 
-void VertexBuffer::unbind() const
+void VertexBufferGL::unbind() const
 {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	__boundVBO = 0;

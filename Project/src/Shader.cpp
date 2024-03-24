@@ -3,7 +3,7 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 
-#include <iostream>
+#include "Debug.h"
 #include <vector>
 #include <fstream>
 
@@ -169,14 +169,37 @@ unsigned int Shader::compileShader(unsigned int shaderType, const std::string& s
 		char* msg = (char*)alloca(length * sizeof(char));
 		glGetShaderInfoLog(id, length, &length, &msg[0]);
 
-		std::cout << "Failed to compile shader! (shader = " << shaderType << ")" << std::endl;
-		std::cout << msg << std::endl;
+		Debug::printMessage(*this, "Failed to compile shader! (" + getShaderTypeName(shaderType) + ")", DebugSeverityLevel::DANGER);
+		Debug::printMessage(*this, msg, DebugSeverityLevel::DANGER);
 
 		glDeleteShader(id);
 		return 0;
 	}
 
 	return id;
+}
+
+std::string Shader::getShaderTypeName(const unsigned int& type) const
+{
+	std::string output = "";
+
+	switch (type)
+	{
+	case GL_VERTEX_SHADER:
+		output.append("Vertex ");
+		break;
+	case GL_GEOMETRY_SHADER:
+		output.append("Geomtry ");
+		break;
+	case GL_FRAGMENT_SHADER:
+		output.append("Fragment ");
+		break;
+	default:
+		output.append("[invalid shader type] ");
+	}
+
+	output.append("shader");
+	return output;
 }
 
 int Shader::getUniformLocation(const std::string& name)
@@ -188,7 +211,7 @@ int Shader::getUniformLocation(const std::string& name)
 
 	if (location == -1)
 	{
-		std::cout << "There is no uniform with name \"" << name << "\"! (mRendererID = " << m_RendererID << "; check whether the uniform is used in GLSL shader)" << std::endl;
+		Debug::printMessage(*this, "There is no uniform with name \"" + name + "\"! (mRendererID = " + STRING(m_RendererID) + "; check whether the uniform is used in GLSL shader)", DebugSeverityLevel::DANGER);
 		return location;
 	}
 

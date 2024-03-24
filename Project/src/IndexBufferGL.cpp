@@ -1,4 +1,4 @@
-#include "IndexBuffer.h"
+#include "IndexBufferGL.h"
 
 #ifndef GLEW_STATIC
 #define GLEW_STATIC
@@ -9,19 +9,19 @@
 
 #define INITIAL_BUFFER_SIZE 1 * 1024 * 1024; // 1 MB in bytes
 
-unsigned int IndexBuffer::__boundIBO = 0;
+unsigned int IndexBufferGL::__boundIBO = 0;
 
-IndexBuffer::IndexBuffer()
+IndexBufferGL::IndexBufferGL()
 	:
 	m_Usage(GL_STATIC_DRAW),
 	m_Count(0)
 {
 	glGenBuffers(1, &m_RendererID);
 
-	Debug::printMessage(*this, "IndexBuffer created without any data! (mRendererID = " + STRING(m_RendererID) + ")", DebugSeverityLevel::MEDIUM);
+	Debug::printMessage(*this, "IndexBufferGL created without any data! (mRendererID = " + STRING(m_RendererID) + ")", DebugSeverityLevel::MEDIUM);
 }
 
-IndexBuffer::IndexBuffer(const void* data, const unsigned int& count, const unsigned int& usage)
+IndexBufferGL::IndexBufferGL(const void* data, const unsigned int& count, const unsigned int& usage)
 	:
 	m_Usage(GL_STATIC_DRAW),
 	m_Count(count)
@@ -32,13 +32,13 @@ IndexBuffer::IndexBuffer(const void* data, const unsigned int& count, const unsi
 	fillBuffer(data, count, usage);
 }
 
-IndexBuffer::~IndexBuffer()
+IndexBufferGL::~IndexBufferGL()
 {
 	Debug::printMessage(*this, "Index buffer " + STRING(m_RendererID) + " destroyed!", DebugSeverityLevel::OK);
 	glDeleteBuffers(1, &m_RendererID);
 }
 
-void IndexBuffer::fillBuffer(const void* data, const unsigned int& count, const unsigned int& usage)
+void IndexBufferGL::fillBuffer(const void* data, const unsigned int& count, const unsigned int& usage)
 {
 	adjustBufferSize(count * sizeof(unsigned int), usage);
 
@@ -52,7 +52,7 @@ void IndexBuffer::fillBuffer(const void* data, const unsigned int& count, const 
 	}
 }
 
-void IndexBuffer::insertDataWithOffset(const void* data, const unsigned int& count, const unsigned int& offset)
+void IndexBufferGL::insertDataWithOffset(const void* data, const unsigned int& count, const unsigned int& offset)
 {
 	size_t size = count * sizeof(unsigned int);
 
@@ -65,7 +65,7 @@ void IndexBuffer::insertDataWithOffset(const void* data, const unsigned int& cou
 	m_Count = ((offset / sizeof(unsigned int)) + count > m_Count) ? (offset / sizeof(unsigned int)) + count : m_Count;
 }
 
-unsigned int IndexBuffer::appendData(const void* data, const unsigned int& count)
+unsigned int IndexBufferGL::appendData(const void* data, const unsigned int& count)
 {
 	auto offset = m_BufferSize;
 
@@ -77,7 +77,7 @@ unsigned int IndexBuffer::appendData(const void* data, const unsigned int& count
 	return offset;
 }
 
-void IndexBuffer::adjustBufferSize(const unsigned int& newSize, const unsigned int& usage)
+void IndexBufferGL::adjustBufferSize(const unsigned int& newSize, const unsigned int& usage)
 {
 	bool sizeChanged = false;
 
@@ -111,7 +111,7 @@ void IndexBuffer::adjustBufferSize(const unsigned int& newSize, const unsigned i
 	}
 }
 
-void IndexBuffer::bind() const
+void IndexBufferGL::bind() const
 {
 	if (m_Count == 0)
 	{
@@ -127,17 +127,17 @@ void IndexBuffer::bind() const
 	__boundIBO = m_RendererID;
 }
 
-void IndexBuffer::unbind() const
+void IndexBufferGL::unbind() const
 {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-const unsigned int& IndexBuffer::getIndicesCount() const
+const unsigned int& IndexBufferGL::getIndicesCount() const
 {
 	return m_Count;
 }
 
-const unsigned int& IndexBuffer::getBufferSize() const
+const unsigned int& IndexBufferGL::getBufferSize() const
 {
 	return m_BufferSize;
 }
@@ -147,7 +147,7 @@ const unsigned int& IndexBuffer::getBufferSize() const
 /// </summary>
 /// <returns>Returns offset (in bytes) at which the free memory starts</returns>
 /// 
-const unsigned int& IndexBuffer::getOffset() const
+const unsigned int& IndexBufferGL::getOffset() const
 {
 	return m_BufferSize;
 }

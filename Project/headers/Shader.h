@@ -44,6 +44,8 @@ private:
 	ShaderProgramSource readShaderFile(const std::string& filePath);
 	unsigned int compileShader(unsigned int shaderType, const std::string& source);
 
+	std::string getShaderTypeName(const unsigned int& type) const;
+
 	int getUniformLocation(const std::string& name);
 
 	static int __activeShaderID;

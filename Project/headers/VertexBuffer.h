@@ -6,35 +6,23 @@ class VertexBuffer
 {
 public:
 
-	VertexBuffer();
-	VertexBuffer(const void* data, const unsigned int& size, unsigned int usage);
-	~VertexBuffer();
+	virtual void fillBuffer(const void* data, const unsigned int& size, unsigned int usage) = 0;
+	virtual void insertDataWithOffset(const void* data, const unsigned int& size, const unsigned int& offset) = 0;
+	virtual unsigned int appendData(const void* data, const unsigned int& size) = 0;
 
-	void fillBuffer(const void* data, const unsigned int& size, unsigned int usage);
-	void insertDataWithOffset(const void* data, const unsigned int& size, const unsigned int& offset);
-	unsigned int appendData(const void* data, const unsigned int& size);
+	virtual const bool& isInitialized() const = 0;
 
-	void adjustBufferSize(const unsigned int& newSize, const unsigned int& usage);
+	virtual const unsigned int& getRendererID() const = 0;
+	virtual const unsigned int& getBufferCapacity() const = 0;
+	virtual const unsigned int& getBufferSize() const = 0;
+	virtual const unsigned int& getOffset() const = 0;
 
-	const bool& isInitialized() const;
-
-	const unsigned int& getRendererID() const;
-	const unsigned int& getBufferCapacity() const;
-	const unsigned int& getBufferSize() const;
-	const unsigned int& getOffset() const;
-
-	void bind() const;
-	void bind(const unsigned int& bindingIndex, const VertexBufferLayout& layout) const;
-	void unbind() const;
+	virtual void bind() const = 0;
+	virtual void bind(const unsigned int& bindingIndex, const VertexBufferLayout& layout) const = 0;
+	virtual void unbind() const = 0;
 
 private:
 
-	static unsigned int __boundVBO;
+	virtual void adjustBufferSize(const unsigned int& newSize, const unsigned int& usage) = 0;
 
-	bool m_Initialized = false;
-	unsigned int m_RendererID = 0;
-	unsigned int m_Usage;
-
-	unsigned int m_BufferCapacity = 0; // (filled memory + reserved memory); in bytes
-	unsigned int m_BufferSize = 0; // (filled memory); in bytes
 };
