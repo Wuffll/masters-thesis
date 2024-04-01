@@ -3,14 +3,24 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image/stb_image.h>
 
+ImageLoaderSTBI::ImageLoaderSTBI()
+{
+	stbi_set_flip_vertically_on_load(true);
+}
+
 ImageInfo ImageLoaderSTBI::loadFromFile(const std::string& filePath)
 {
 	ImageInfo output;
 
-	int comp;
-	output.m_Data = stbi_load(filePath.c_str(), &output.m_Width, &output.m_Height, &comp, 1);
+	Pixel* imageData = (Pixel*) stbi_load(filePath.c_str(), &output.width, &output.height, &output.numChannels, 0);;
 
-	if (!output.m_Data)
+	const unsigned int imagePixelNum = output.getPixelNum();
+
+	output.data.assign(imageData, imageData + imagePixelNum);
+
+	stbi_image_free(imageData);
+
+	if (!output.data.data())
 		printf("WARNING (ImageLoaderSTBI.hpp): Loading an image (%s) was unsuccessful!", filePath.c_str());
 
 	return output;

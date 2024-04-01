@@ -34,7 +34,7 @@ IndexBufferGL::IndexBufferGL(const void* data, const unsigned int& count, const 
 
 IndexBufferGL::~IndexBufferGL()
 {
-	Debug::printMessage(*this, "Index buffer " + STRING(m_RendererID) + " destroyed!", DebugSeverityLevel::OK);
+	Debug::printMessage(*this, "IndexBufferGL " + STRING(m_RendererID) + " destroyed!", DebugSeverityLevel::OK);
 	glDeleteBuffers(1, &m_RendererID);
 }
 
@@ -54,7 +54,7 @@ void IndexBufferGL::fillBuffer(const void* data, const unsigned int& count, cons
 
 void IndexBufferGL::insertDataWithOffset(const void* data, const unsigned int& count, const unsigned int& offset)
 {
-	size_t size = count * sizeof(unsigned int);
+	unsigned int size = count * sizeof(unsigned int);
 
 	bind();
 	adjustBufferSize(offset + size, m_Usage);
@@ -107,7 +107,7 @@ void IndexBufferGL::adjustBufferSize(const unsigned int& newSize, const unsigned
 
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_BufferCapacity, data, usage);
 
-		delete data;
+		free(data);
 	}
 }
 
@@ -115,13 +115,11 @@ void IndexBufferGL::bind() const
 {
 	if (m_Count == 0)
 	{
-		Debug::printMessage(*this, "Index buffer " + STRING(m_RendererID) + " is not initialized! (count = 0)", DebugSeverityLevel::HIGH);
+		Debug::printMessage(*this, "IndexBufferGL " + STRING(m_RendererID) + " is not initialized! (count = 0)", DebugSeverityLevel::HIGH);
 	}
 
-	/*
-	if (mRendererID == boundIBO)
+	if (m_RendererID == __boundIBO)
 		return;
-	*/
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
 	__boundIBO = m_RendererID;
@@ -130,6 +128,7 @@ void IndexBufferGL::bind() const
 void IndexBufferGL::unbind() const
 {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	__boundIBO = 0;
 }
 
 const unsigned int& IndexBufferGL::getIndicesCount() const

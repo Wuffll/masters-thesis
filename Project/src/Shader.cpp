@@ -24,11 +24,11 @@ Shader::~Shader()
 
 void Shader::bind() const
 {
-	if (__activeShaderID != m_RendererID)
-	{
-		glUseProgram(m_RendererID);
-		__activeShaderID = m_RendererID;
-	}
+	if (__activeShaderID == m_RendererID)
+		return;
+		
+	glUseProgram(m_RendererID);
+	__activeShaderID = m_RendererID;
 }
 
 void Shader::unbind() const

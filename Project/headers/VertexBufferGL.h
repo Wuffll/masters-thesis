@@ -27,7 +27,7 @@ public:
 
 private:
 
-	void adjustBufferSize(const unsigned int& newSize, const unsigned int& usage) = 0;
+	void adjustBufferSize(const unsigned int& newSize, const unsigned int& usage);
 
 	
 

@@ -2,6 +2,8 @@
 
 #include "Debug.h"
 
+unsigned int VertexArray::__boundVAO = 0;
+
 VertexArray::VertexArray()
 	:
 	m_Usage(GL_STATIC_DRAW),
@@ -63,12 +65,17 @@ void VertexArray::addBuffer(const VertexBuffer& vb, const IndexBuffer& ib)
 
 void VertexArray::bind() const
 {
+	if (__boundVAO == m_RendererID)
+		return;
+
 	glBindVertexArray(m_RendererID);
+	__boundVAO = m_RendererID;
 }
 
 void VertexArray::unbind() const
 {
 	glBindVertexArray(0);
+	__boundVAO = 0;
 }
 
 void VertexArray::assignVertexAttributes()

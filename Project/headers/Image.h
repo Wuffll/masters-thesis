@@ -2,21 +2,44 @@
 
 #include <string>
 #include <vector>
+#include <cstdlib>
 
 class ImageLoader;
 
+struct Pixel
+{
+	unsigned char R;
+	unsigned char G;
+	unsigned char B;
+};
+
+struct PixelFloat
+{
+	float R;
+	float G;
+	float B;
+};
+
 struct ImageInfo
 {
-	unsigned char* m_Data = nullptr;
-	int m_Width = -1;
-	int m_Height = -1;
+	std::vector<Pixel> data;
+	// unsigned char* m_Data = nullptr;
+	int width = -1;
+	int height = -1;
+	int numChannels = -1;
 
-	void free() 
-	{ 
-		if (m_Data)
-		{
-			delete m_Data;
-		}
+	int getDataSize() const 
+	{
+		return width * height * numChannels;
+	}
+
+	int getPixelNum() const
+	{
+		return width * height;
+	}
+
+	void free()
+	{
 	}
 };
 
@@ -33,7 +56,10 @@ public:
 	void loadImage();
 
 	const ImageInfo& getImageInfo() const;
-	const unsigned char* getImageData() const;
+	const std::vector<Pixel>& getImageData() const;
+
+	void convertToGrayscale();
+	std::vector<PixelFloat> createNormalized01() const; // normalizes image data from 0-255 to 0.0-1.0
 
 	void setFilePath(const std::string& filePath);
 	const std::string& getFilePath() const;

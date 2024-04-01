@@ -6,7 +6,7 @@ class ImageLoaderSTBI : public ImageLoader
 {
 public:
 
-	ImageLoaderSTBI() = default;
+	ImageLoaderSTBI();
 
 	virtual ImageInfo loadFromFile(const std::string& filePath);
 

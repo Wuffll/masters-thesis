@@ -33,7 +33,7 @@ VertexBufferGL::VertexBufferGL(const void* data, const unsigned int& size, unsig
 
 VertexBufferGL::~VertexBufferGL()
 {
-	Debug::printMessage(*this, "Vertex buffer " + STRING(m_RendererID) + " destroyed!", DebugSeverityLevel::OK);
+	Debug::printMessage(*this, "VertexBufferGL " + STRING(m_RendererID) + " destroyed!", DebugSeverityLevel::OK);
 	glDeleteBuffers(1, &m_RendererID);
 }
 
@@ -71,6 +71,56 @@ unsigned int VertexBufferGL::appendData(const void* data, const unsigned int& si
 	return offset;
 }
 
+const bool& VertexBufferGL::isInitialized() const
+{
+	return m_Initialized;
+}
+
+const unsigned int& VertexBufferGL::getRendererID() const
+{
+	return m_RendererID;
+}
+
+const unsigned int& VertexBufferGL::getBufferCapacity() const
+{
+	return m_BufferCapacity;
+}
+
+const unsigned int& VertexBufferGL::getBufferSize() const
+{
+	return m_BufferSize;
+}
+
+const unsigned int& VertexBufferGL::getOffset() const
+{
+	return m_BufferSize;
+}
+
+void VertexBufferGL::bind() const
+{
+	if (!m_Initialized)
+	{
+		Debug::printMessage(*this, "VertexBufferGL " + STRING(m_RendererID) + " is uninitialized! (mInitialized = false)", DebugSeverityLevel::HIGH);
+	}
+
+	if (__boundVBO == m_RendererID)
+		return;
+
+	glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+	__boundVBO = m_RendererID;
+}
+
+void VertexBufferGL::bind(const unsigned int& bindingIndex, const VertexBufferLayout& layout) const
+{
+	glBindVertexBuffer(bindingIndex, m_RendererID, 0, layout.getStride());
+}
+
+void VertexBufferGL::unbind() const
+{
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	__boundVBO = 0;
+}
+
 void VertexBufferGL::adjustBufferSize(const unsigned int& newSize, const unsigned int& usage)
 {
 	bool sizeChanged = false;
@@ -101,58 +151,6 @@ void VertexBufferGL::adjustBufferSize(const unsigned int& newSize, const unsigne
 
 		glBufferData(GL_ARRAY_BUFFER, m_BufferCapacity, data, usage);
 
-		delete data;
+		free(data);
 	}
-}
-
-const bool& VertexBufferGL::isInitialized() const
-{
-	return m_Initialized;
-}
-
-const unsigned int& VertexBufferGL::getRendererID() const
-{
-	return m_RendererID;
-}
-
-const unsigned int& VertexBufferGL::getBufferCapacity() const
-{
-	return m_BufferCapacity;
-}
-
-const unsigned int& VertexBufferGL::getBufferSize() const
-{
-	return m_BufferSize;
-}
-
-const unsigned int& VertexBufferGL::getOffset() const
-{
-	return m_BufferSize;
-}
-
-void VertexBufferGL::bind() const
-{
-	if (!m_Initialized)
-	{
-		Debug::printMessage(*this, "Vertex buffer " + STRING(m_RendererID) + " is uninitialized! (mInitialized = false)", DebugSeverityLevel::HIGH);
-	}
-
-	/*
-	if (boundVBO == mRendererID)
-		return;
-	*/
-
-	glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
-	__boundVBO = m_RendererID;
-}
-
-void VertexBufferGL::bind(const unsigned int& bindingIndex, const VertexBufferLayout& layout) const
-{
-	glBindVertexBuffer(bindingIndex, m_RendererID, 0, layout.getStride());
-}
-
-void VertexBufferGL::unbind() const
-{
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	__boundVBO = 0;
 }

@@ -42,7 +42,7 @@ void Image::loadImage()
 		m_ImageInfo.free();
 		m_ImageInfo = m_pImageLoader->loadFromFile(m_filePath);
 
-		m_ImageLoaded = (!m_ImageInfo.m_Data) ? false : true;
+		m_ImageLoaded = (!m_ImageInfo.data.data()) ? false : true;
 	}
 
 	if (m_ImageLoaded)
@@ -56,9 +56,39 @@ const ImageInfo& Image::getImageInfo() const
 	return m_ImageInfo;
 }
 
-const unsigned char* Image::getImageData() const
+const std::vector<Pixel>& Image::getImageData() const
 {
-	return m_ImageInfo.m_Data;
+	return m_ImageInfo.data;
+}
+
+void Image::convertToGrayscale()
+{
+	unsigned char calculatedColor = 0;
+	for (int i = 0; i < m_ImageInfo.getPixelNum(); i++)
+	{
+		calculatedColor = (m_ImageInfo.data[i].R + m_ImageInfo.data[i].G + m_ImageInfo.data[i].B) / 3;
+		m_ImageInfo.data[i].R = calculatedColor;
+		m_ImageInfo.data[i].G = calculatedColor;
+		m_ImageInfo.data[i].B = calculatedColor;
+	}
+}
+
+std::vector<PixelFloat> Image::createNormalized01() const
+{
+	std::vector<PixelFloat> outputVector{};
+	outputVector.reserve(m_ImageInfo.getDataSize());
+
+	for (int i = 0; i < m_ImageInfo.getPixelNum(); i++)
+	{
+		PixelFloat pixel;
+		pixel.R = (float)m_ImageInfo.data[i].R / 255.0f;
+		pixel.G = (float)m_ImageInfo.data[i].G / 255.0f;
+		pixel.B = (float)m_ImageInfo.data[i].B / 255.0f;
+
+		outputVector.push_back(pixel);
+	}
+
+	return outputVector;
 }
 
 void Image::setFilePath(const std::string& filePath)
