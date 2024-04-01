@@ -4,11 +4,25 @@
 
 #include <glm/glm.hpp>
 
+#include <vector>
 #include <string>
 #include <filesystem>
+#include <Windows.h>
 
+#include "Array2D.h"
 #include "Shader.h"
+#include "Image.h"
 #include "Debug.h"
+#include "TileManager.h"
+#include "Stopwatch.h"
+#include "Camera.h"
+#include "KeyPressCallbacks.h"
+
+#include "VertexFormatLayout.h"
+
+#include "VertexArray.h"
+#include "VertexBufferGL.h"
+#include "IndexBufferGL.h"
 
 void setWindowHints();
 GLFWwindow* createWindow(const int& width, const int& height, const std::string& windowTitle);
@@ -16,6 +30,8 @@ GLFWwindow* initWindow(const int& width, const int& height, const std::string& w
 
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 720
+
+#define MAX(x,y) ((x)>(y) ? (x) : (y))
 
 int main(void)
 {
@@ -25,22 +41,64 @@ int main(void)
 
     GLFWwindow* window = initWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Application");
 
-    Shader defaultShader(workingDirectory + "\\Resources\\shaders\\default.glsl");
+    Shader defaultShader(workingDirectory + "\\Resources\\shaders\\default.glsl"); // if you run from RenderDoc, remember to update the shaders in the shader file in the build folder
 
+    Image heightmap = Image(workingDirectory + "\\Resources\\heightmaps\\snowdon.png");
+    heightmap.convertToGrayscale();
+
+    TileManager manager(heightmap, 500.0f);
+
+    Camera userCamera;
+    m_pMainCamera = &userCamera;
+
+    userCamera.setShader(&defaultShader);
+    userCamera.move({ 0.0f, 0.0f, -1500.0f });
+    userCamera.rotate({ 52.0f, 0.0f, 0.0f });
+
+    glm::mat4 projMat = glm::perspective(45.0f, 1.0f, 0.1f, 3000.0f);
+    glm::mat4 modelMat(1.0f);
+
+    defaultShader.bind();
+    defaultShader.setUniformMatrix4f("uProjection", projMat);
+    defaultShader.setUniformMatrix4f("uModel", modelMat);
+
+    Stopwatch timer;
+
+    timer.start();
+    float frameTime = 0.0f, elapsedTime = 0.0f, interval = 5.0f;
+    glm::vec3 angle(0.0f, 45.0f, 0.0f);
+
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
+        if (interval <= 0.0f)
+        {
+            printf("%lf passed; %lf FPS\n", timer.getTimeElapsed(), 1.0 / timer.getTimeElapsed());
+
+            interval = 5.0f;
+        }
+
         /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        manager.draw();
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
 
+        // userCamera.rotate(frameTime * angle);
+        userCamera.updateTranform();
         /* Poll for and process events */
         glfwPollEvents();
+
+        frameTime = (float)timer.lap();
+        elapsedTime += frameTime;
+        interval -= frameTime;
     }
 
     glfwTerminate();
+
     return 0;
 }
 
@@ -81,7 +139,7 @@ GLFWwindow* initWindow(const int& width, const int& height, const std::string& w
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
-    std::cout << "OpenGL " << glGetString(GL_VERSION) << std::endl;
+    std::cout << "OpenGL " << glGetString(GL_VERSION) << std::endl << std::endl;
 
     // glfwSwapInterval(1);
 
@@ -94,7 +152,7 @@ GLFWwindow* initWindow(const int& width, const int& height, const std::string& w
     glEnable(GL_DEBUG_OUTPUT);
     // glDebugMessageCallback(MessageCallback, NULL);
 
-    // glfwSetKeyCallback(window, key_callback);
+    glfwSetKeyCallback(window, keyCallbackFunction);
 
     glEnable(GL_DEPTH_TEST);
 
