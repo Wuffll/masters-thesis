@@ -28,6 +28,7 @@ const double& Stopwatch::stop()
 	dsec durationInSeconds = m_End - m_Start;
 
 	m_TimeElapsed = durationInSeconds.count();
+	m_HasStarted = false;
 
 	return m_TimeElapsed;
 }
@@ -43,6 +44,11 @@ const double& Stopwatch::lap()
 	m_Start = m_End;
 
 	return m_TimeElapsed;
+}
+
+const bool& Stopwatch::hasStarted() const
+{
+	return m_HasStarted;
 }
 
 const double& Stopwatch::getTimeElapsed() const

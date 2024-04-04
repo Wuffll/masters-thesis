@@ -4,43 +4,54 @@
 
 Camera::Camera()
     :
-    m_Position({0.0f, 0.0f, 0.0f}),
-    m_Orientation({0.0f, 0.0f, 0.0f}),
-    m_Direction({0.0f, 0.0f, -1.0f}),
-    m_UpVec({0.0f, 1.0f, 0.0f}),
-    m_RightVec({1.0f, 0.0f, 0.0f}),
+    m_ForwardVec({0.0f, 0.0f, -1.0f, 1.0f}),
+    m_UpVec({0.0f, 1.0f, 0.0f, 1.0f}),
+    m_RightVec({1.0f, 0.0f, 0.0f, 1.0f}),
     m_pShader(nullptr)
 {
-    m_Transform = glm::lookAt(m_Position, m_Position + m_Direction, m_UpVec);
+    const auto& position = m_Transform.getPosition();
+    m_Transform = glm::lookAt(position, position + glm::vec3(m_ForwardVec), glm::vec3(m_UpVec));
 }
 
 Camera::Camera(const glm::vec3& pos, const glm::vec3& direction, Shader* pShader)
     :
-    m_Position(pos),
-    m_Orientation({ 0.0f, 0.0f, 0.0f }),
-    m_Direction(direction),
-    m_UpVec({ 0.0f, 1.0f, 0.0f }),
-    m_RightVec({ 1.0f, 0.0f, 0.0f }),
+    m_ForwardVec(direction, 1.0f),
+    m_UpVec({ 0.0f, 1.0f, 0.0f, 1.0f }),
+    m_RightVec({ 1.0f, 0.0f, 0.0f, 1.0f }),
     m_pShader(pShader)
 {
-    m_Transform = glm::lookAt(m_Position, m_Position + m_Direction, m_UpVec);
+    const auto& position = m_Transform.getPosition();
+    m_Transform = glm::lookAt(position, position + glm::vec3(m_ForwardVec), glm::vec3(m_UpVec));
 }
 
 const glm::vec3& Camera::getPosition() const
 {
-    return m_Position;
+    return m_Transform.getPosition();
 }
 
-const glm::vec3& Camera::getDirection() const
+const glm::vec3& Camera::getOrientation() const
 {
-    return m_Direction;
+    return m_Transform.getOrientation();
+}
+
+const float& Camera::getSpeed() const
+{
+    return m_Speed;
+}
+
+const glm::vec4& Camera::getForwardVector() const
+{
+    return m_ForwardVec;
+}
+
+const glm::vec4& Camera::getRightVector() const
+{
+    return m_RightVec;
 }
 
 void Camera::setPosition(const glm::vec3& pos)
 {
-
-    m_Transform.setPosition(-pos);
-    m_Position = pos;
+    m_Transform.setPosition(pos);
 
     m_HasChanged = true;
 }
@@ -61,7 +72,6 @@ void Camera::updateTranform()
 void Camera::move(const glm::vec3& delta)
 {
     m_Transform.translation(delta);
-    m_Position += delta;
 
     m_HasChanged = true;
 }
@@ -69,7 +79,10 @@ void Camera::move(const glm::vec3& delta)
 void Camera::rotate(const glm::vec3& delta)
 {
     m_Transform.rotate(delta);
-    m_Orientation += delta;
+
+    m_RightVec = m_RightVec;
+    m_ForwardVec = m_ForwardVec;
+    m_UpVec = m_UpVec;
 
     m_HasChanged = true;
 }

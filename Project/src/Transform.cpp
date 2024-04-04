@@ -22,6 +22,21 @@ const glm::mat4& Transform::getMatrix()
 	return m_Matrix;
 }
 
+const glm::mat4& Transform::getTranslationMat() const
+{
+	return m_Translation;
+}
+
+const glm::mat4& Transform::getRotationMat() const
+{
+	return m_Rotation;
+}
+
+const glm::mat4& Transform::GetScalingMat() const
+{
+	return m_Scaling;
+}
+
 const glm::vec3& Transform::getPosition() const
 {
 	return m_Position;
@@ -127,6 +142,11 @@ void Transform::translation(const glm::vec3& translation)
 
 	m_Translation = glm::translate(m_Translation, translation);
 	m_Position += translation;
+}
+
+void Transform::translation(const glm::vec4& translation)
+{
+	this->translation({translation.x, translation.y, translation.z});
 }
 
 void Transform::rotate(const glm::vec3& rotation)

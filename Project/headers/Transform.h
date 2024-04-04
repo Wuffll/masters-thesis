@@ -25,7 +25,12 @@ public:
 	const glm::vec3& getPosition() const;
 	const glm::vec3& getOrientation() const;
 	const glm::vec3& getScale() const;
+
 	const glm::mat4& getMatrix();
+	const glm::mat4& getTranslationMat() const;
+	const glm::mat4& getRotationMat() const;
+	const glm::mat4& GetScalingMat() const;
+
 
 	void setPosition(const glm::vec3& pos);
 	void setOrientation(const glm::vec3& orientation);
@@ -37,6 +42,8 @@ public:
 	void resetScale();
 
 	void translation(const glm::vec3& translation);
+	void translation(const glm::vec4& translation);
+
 	void rotate(const glm::vec3& rotation);
 	void scale(const glm::vec3& scale);
 

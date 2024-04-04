@@ -14,6 +14,8 @@ public:
 	const double& stop();
 	const double& lap();
 
+	const bool& hasStarted() const;
+
 	const double& getTimeElapsed() const;
 
 private:
