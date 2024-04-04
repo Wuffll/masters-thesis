@@ -6,8 +6,9 @@
 #include "ImageLoaderSTBI.h"
 
 Image::Image()
+	:
+	m_pImageLoader(new ImageLoaderSTBI())
 {
-	m_pImageLoader = new ImageLoaderSTBI();
 }
 
 Image::Image(const std::string& filePath)

@@ -42,7 +42,7 @@ public:
 	void setTileActive(Tile* active);
 	void setTileActive(const unsigned int& index);
 
-	const std::vector<VertexFormat::ThreeVec3>& getVertexData() const { return m_VertexData; }
+	const std::vector<TILE_VERTEX_FORMAT>& getVertexData() const { return m_VertexData; }
 	const std::vector<unsigned int>& getIndexData() const { return m_IndexData; }
 
 private:
@@ -87,7 +87,7 @@ private:
 	std::vector<Tile> m_Tiles;
 	Tile* m_ActiveTile = nullptr;
 
-	std::vector<VertexFormat::ThreeVec3> m_VertexData;
+	std::vector<TILE_VERTEX_FORMAT> m_VertexData;
 	std::vector<unsigned int> m_IndexData;
 
 	VertexBuffer* m_pVBO;
