@@ -45,6 +45,8 @@ public:
 	void translation(const glm::vec4& translation);
 
 	void rotate(const glm::vec3& rotation);
+	void rotate(const glm::vec3& axis, const float& angle);
+
 	void scale(const glm::vec3& scale);
 
 private:

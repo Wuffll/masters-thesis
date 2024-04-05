@@ -17,6 +17,7 @@ public:
 	const glm::vec3& getPosition() const;
 	const glm::vec3& getOrientation() const;
 	const float& getSpeed() const;
+	const float& getSensitivity() const;
 
 	const glm::vec4& getForwardVector() const;
 	const glm::vec4& getRightVector() const;
@@ -34,7 +35,8 @@ private:
 	void updateShaderData();
 
 	Transform m_Transform;
-	float m_Speed = 100.0f;
+	float m_Speed = 500.0f;
+	float m_Sensitivity = 30.0f;
 
 	Shader* m_pShader;
 

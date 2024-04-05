@@ -6,9 +6,10 @@ Camera::Camera()
     :
     m_ForwardVec({0.0f, 0.0f, -1.0f, 1.0f}),
     m_UpVec({0.0f, 1.0f, 0.0f, 1.0f}),
-    m_RightVec({1.0f, 0.0f, 0.0f, 1.0f}),
     m_pShader(nullptr)
 {
+    m_RightVec = glm::vec4(glm::cross(glm::vec3(m_ForwardVec), glm::vec3(m_UpVec)), 1.0f);
+
     const auto& position = m_Transform.getPosition();
     m_Transform = glm::lookAt(position, position + glm::vec3(m_ForwardVec), glm::vec3(m_UpVec));
 }
@@ -17,9 +18,10 @@ Camera::Camera(const glm::vec3& pos, const glm::vec3& direction, Shader* pShader
     :
     m_ForwardVec(direction, 1.0f),
     m_UpVec({ 0.0f, 1.0f, 0.0f, 1.0f }),
-    m_RightVec({ 1.0f, 0.0f, 0.0f, 1.0f }),
     m_pShader(pShader)
 {
+    m_RightVec = glm::vec4(glm::cross(glm::vec3(m_ForwardVec), glm::vec3(m_UpVec)), 1.0f);
+
     const auto& position = m_Transform.getPosition();
     m_Transform = glm::lookAt(position, position + glm::vec3(m_ForwardVec), glm::vec3(m_UpVec));
 }
@@ -37,6 +39,11 @@ const glm::vec3& Camera::getOrientation() const
 const float& Camera::getSpeed() const
 {
     return m_Speed;
+}
+
+const float& Camera::getSensitivity() const
+{
+    return m_Sensitivity;
 }
 
 const glm::vec4& Camera::getForwardVector() const
@@ -78,11 +85,8 @@ void Camera::move(const glm::vec3& delta)
 
 void Camera::rotate(const glm::vec3& delta)
 {
-    m_Transform.rotate(delta);
-
-    m_RightVec = m_RightVec;
-    m_ForwardVec = m_ForwardVec;
-    m_UpVec = m_UpVec;
+    m_Transform.rotate(m_RightVec, delta.x);
+    m_Transform.rotate(m_UpVec, delta.y);
 
     m_HasChanged = true;
 }

@@ -135,7 +135,7 @@ void Transform::resetScale()
 
 void Transform::translation(const glm::vec3& translation)
 {
-	if (translation.length() == 0.0f)
+	if (glm::length(translation) == 0.0f)
 		return;
 
 	m_HasTransformed = true;
@@ -151,7 +151,7 @@ void Transform::translation(const glm::vec4& translation)
 
 void Transform::rotate(const glm::vec3& rotation)
 {
-	if (rotation.length() == 0.0f)
+	if (glm::length(rotation) == 0.0f)
 		return;
 
 	m_HasTransformed = true;
@@ -166,6 +166,18 @@ void Transform::rotate(const glm::vec3& rotation)
 	m_Rotation = glm::rotate(m_Rotation, glm::radians(rotation.z), axis);
 
 	m_Orientation += rotation;
+}
+
+void Transform::rotate(const glm::vec3& axis, const float& angle)
+{
+	if (angle == 0.0f)
+		return;
+
+	m_HasTransformed = true;
+
+	m_Rotation = glm::rotate(m_Rotation, angle, axis);
+
+	m_Orientation = calculateRotationMatrixAngles(m_Rotation);
 }
 
 void Transform::scale(const glm::vec3& scale)
