@@ -23,19 +23,25 @@ public:
 
 private:
 	
-	static void keyboardProcessing(GLFWwindow* window, int key, int scancode, int action, int mods);
-	static void mousePosProcessing(GLFWwindow* window, double xpos, double ypos);
-	static void mouseButtonProcessing(GLFWwindow* window, int button, int action, int mods);
-
-	static void determineMovementDirection();
+	static void keyboardInput(GLFWwindow* window, int key, int scancode, int action, int mods);
+	static void mousePosInput(GLFWwindow* window, double xpos, double ypos);
+	static void mouseButtonInput(GLFWwindow* window, int button, int action, int mods);
 
 	static void updateMousePosition(const double& xpos, const double& ypos);
 
-	static void movementCalculation(float deltaTime);
-	static void rotationCalculation(float deltaTime);
+	static void processKeyboardCommand(const KeyboardCommand& kbCommand, const float& deltaTime);
+	static void shouldWindowClose(const KeyboardCommand& kbCommand);
+	static void movementCalculation(const KeyboardCommand& kbCommand, float deltaTime);
+	static void determineMovementDirection(const KeyboardCommand& kbCommand);
 
+	static void processMouseCommand(const MouseCommand& mouseCommand, const float& deltaTime);
+	static void rotationCalculation(const MouseCommand& mouseCommand, float deltaTime);
+	static void determineRotationActivated(const MouseCommand& mouseCommand);
+
+	static GLFWwindow* __appWindow;
 	static CommandHistory __commandHistory;
 	static glm::vec3 __movementDirection;
+	static bool __rotationEnabled;
 	static MousePosition __mousePos;
 
 	static Camera* __userCamera;

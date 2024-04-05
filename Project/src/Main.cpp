@@ -50,11 +50,9 @@ int main(void)
     Image heightmap = Image(workingDirectory + "\\Resources\\heightmaps\\snowdon.png");
     heightmap.convertToGrayscale();
 
-    TileManager manager(heightmap, 500.0f);
+    TileManager manager(heightmap, 350.0f);
 
     userCamera.setShader(&defaultShader);
-    userCamera.move({ 0.0f, 0.0f, -1500.0f });
-    userCamera.rotate({ 52.0f, 0.0f, 0.0f });
 
     glm::mat4 projMat = glm::perspective(45.0f, 1.0f, 0.1f, 3000.0f);
     glm::mat4 modelMat(1.0f);

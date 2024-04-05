@@ -23,7 +23,10 @@ public:
 	void addNewKeyboardCommand(const int& keyPressed, const int& action);
 	void addNewMouseCommand(const int& buttonPressed, const int& action);
 
+	bool hasNextKeyboardCommand();
 	const KeyboardCommand getNextKeyboardCommand();
+
+	bool hasNextMouseCommand();
 	const MouseCommand getNextMouseCommand();
 
 private:

@@ -10,6 +10,11 @@ void CommandHistory::addNewMouseCommand(const int& buttonPressed, const int& act
 	m_MouseCommandHistory.push({ buttonPressed, action });
 }
 
+bool CommandHistory::hasNextKeyboardCommand()
+{
+	return m_KeyboardCommandHistory.size() != 0;
+}
+
 const KeyboardCommand CommandHistory::getNextKeyboardCommand()
 {
 	const auto& historySize = m_KeyboardCommandHistory.size();
@@ -22,6 +27,11 @@ const KeyboardCommand CommandHistory::getNextKeyboardCommand()
 	m_KeyboardCommandHistory.pop();
 
 	return latestCommand;
+}
+
+bool CommandHistory::hasNextMouseCommand()
+{
+	return m_MouseCommandHistory.size() != 0;
 }
 
 const MouseCommand CommandHistory::getNextMouseCommand()
