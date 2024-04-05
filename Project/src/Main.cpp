@@ -9,14 +9,13 @@
 #include <filesystem>
 #include <Windows.h>
 
-#include "Array2D.h"
 #include "Shader.h"
 #include "Image.h"
 #include "Debug.h"
 #include "TileManager.h"
-#include "Stopwatch.h"
 #include "Camera.h"
-#include "KeyPressCallbacks.h"
+#include "FPSManager.h"
+#include "UserControls.h"
 
 #include "VertexFormatLayout.h"
 
@@ -25,6 +24,7 @@
 #include "IndexBufferGL.h"
 
 void setWindowHints();
+void enableFeatures(GLFWwindow* window);
 GLFWwindow* createWindow(const int& width, const int& height, const std::string& windowTitle);
 GLFWwindow* initWindow(const int& width, const int& height, const std::string& windowTitle);
 
@@ -33,6 +33,7 @@ GLFWwindow* initWindow(const int& width, const int& height, const std::string& w
 
 #define MAX(x,y) ((x)>(y) ? (x) : (y))
 
+
 int main(void)
 {
     std::string workingDirectory = std::filesystem::current_path().string();
@@ -40,16 +41,16 @@ int main(void)
     printf("Working directory: %s\n", workingDirectory.c_str());
 
     GLFWwindow* window = initWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Application");
+    Camera userCamera;
 
+    UserControls::initUserControls(window, &userCamera);
+ 
     Shader defaultShader(workingDirectory + "\\Resources\\shaders\\default.glsl"); // if you run from RenderDoc, remember to update the shaders in the shader file in the build folder
 
     Image heightmap = Image(workingDirectory + "\\Resources\\heightmaps\\snowdon.png");
     heightmap.convertToGrayscale();
 
     TileManager manager(heightmap, 500.0f);
-
-    Camera userCamera;
-    m_pMainCamera = &userCamera;
 
     userCamera.setShader(&defaultShader);
     userCamera.move({ 0.0f, 0.0f, -1500.0f });
@@ -62,19 +63,19 @@ int main(void)
     defaultShader.setUniformMatrix4f("uProjection", projMat);
     defaultShader.setUniformMatrix4f("uModel", modelMat);
 
-    Stopwatch timer;
+    FPSManager fpsManager;
 
-    timer.start();
     float frameTime = 0.0f, elapsedTime = 0.0f, interval = 5.0f;
-    glm::vec3 angle(0.0f, 45.0f, 0.0f);
 
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
+        fpsManager.startFrame();
+
         if (interval <= 0.0f)
         {
-            printf("%lf passed; %lf FPS\n", timer.getTimeElapsed(), 1.0 / timer.getTimeElapsed());
+            printf("%lf passed; %lf FPS\n", elapsedTime, fpsManager.getFps());
 
             interval = 5.0f;
         }
@@ -92,9 +93,13 @@ int main(void)
         /* Poll for and process events */
         glfwPollEvents();
 
-        frameTime = (float)timer.lap();
+        fpsManager.endFrame();
+
+        frameTime = fpsManager.getTimer().getTimeElapsed();
         elapsedTime += frameTime;
         interval -= frameTime;
+
+        UserControls::tick(frameTime);
     }
 
     glfwTerminate();
@@ -107,6 +112,17 @@ void setWindowHints()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+}
+
+void enableFeatures(GLFWwindow* window)
+{
+    glEnable(GL_DEBUG_OUTPUT);
+    // glDebugMessageCallback(MessageCallback, NULL);
+
+    glEnable(GL_DEPTH_TEST);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 GLFWwindow* createWindow(const int& width, const int& height, const std::string& windowTitle)
@@ -149,15 +165,7 @@ GLFWwindow* initWindow(const int& width, const int& height, const std::string& w
         exit(-1);
     }
 
-    glEnable(GL_DEBUG_OUTPUT);
-    // glDebugMessageCallback(MessageCallback, NULL);
-
-    glfwSetKeyCallback(window, keyCallbackFunction);
-
-    glEnable(GL_DEPTH_TEST);
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    enableFeatures(window);
 
     glClearColor(0.025f, 0.0f, 0.125f, 1.0f);
 

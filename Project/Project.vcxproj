@@ -86,6 +86,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\FPSManager.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\IndexBufferGL.cpp" />
     <ClCompile Include="src\Shader.cpp" />
@@ -98,8 +99,10 @@
     <ClCompile Include="src\Tile.cpp" />
     <ClCompile Include="src\TileManager.cpp" />
     <ClCompile Include="src\Stopwatch.cpp" />
+    <ClCompile Include="src\CommandHistory.cpp" />
+    <ClCompile Include="src\UserControls.cpp" />
+    <ClInclude Include="headers\FPSManager.h" />
     <ClInclude Include="headers\Camera.h" />
-    <ClInclude Include="headers\Array2D.h" />
     <ClInclude Include="headers\Debug.h" />
     <ClInclude Include="headers\Drawable.h" />
     <ClInclude Include="headers\ImageLoaderSTBI.h" />
@@ -118,7 +121,8 @@
     <ClInclude Include="headers\TileManager.h" />
     <ClInclude Include="headers\VertexFormatLayout.h" />
     <ClInclude Include="headers\Stopwatch.h" />
-    <ClInclude Include="headers\KeyPressCallbacks.h" />
+    <ClInclude Include="headers\CommandHistory.h" />
+    <ClInclude Include="headers\UserControls.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\Image.h" />
