@@ -15,12 +15,11 @@ public:
 	Camera(const glm::vec3& pos, const glm::vec3& direction, Shader* shader);
 
 	const glm::vec3& getPosition() const;
-	const glm::vec3& getOrientation() const;
+	const glm::vec3& getForwardVector() const;
+	const glm::vec3& getRightVector() const;
+
 	const float& getSpeed() const;
 	const float& getSensitivity() const;
-
-	const glm::vec4& getForwardVector() const;
-	const glm::vec4& getRightVector() const;
 
 	void setPosition(const glm::vec3& pos);
 	void setShader(Shader* pShader);
@@ -34,16 +33,17 @@ private:
 
 	void updateShaderData();
 
-	Transform m_Transform;
+	glm::mat4 m_ViewMatrix = { 1.0f };
+
+	glm::vec3 m_Pos = { 0.0f, 0.0f, 0.0f };
+	glm::vec3 m_ForwardVec = { 0.0f, 0.0f, -1.0f };
+	glm::vec3 m_UpVec = { 0.0f, 1.0f, 0.0f };
+	glm::vec3 m_RightVec = { 1.0f, 0.0f, 0.0f };
+
 	float m_Speed = 500.0f;
-	float m_Sensitivity = 30.0f;
+	float m_Sensitivity = 300.0f;
 
 	Shader* m_pShader;
-
 	bool m_HasChanged = false;
-
-	glm::vec4 m_ForwardVec;
-	glm::vec4 m_RightVec;
-	glm::vec4 m_UpVec;
 };
 

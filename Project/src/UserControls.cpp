@@ -5,7 +5,10 @@
 
 GLFWwindow* UserControls::__appWindow = nullptr;
 CommandHistory UserControls::__commandHistory;
+
 glm::vec3 UserControls::__movementDirection = {0.0f, 0.0f, 0.0f};
+bool UserControls::__movementEnabled = false;
+
 bool UserControls::__rotationEnabled = false;
 MousePosition UserControls::__mousePos;
 
@@ -45,8 +48,10 @@ void UserControls::keyboardInput(GLFWwindow* window, int key, int scancode, int 
 
 void UserControls::mousePosInput(GLFWwindow* window, double xpos, double ypos)
 {
+	/*
 	Debug::printMessage(UserControls(), 
 		"Mouse pos: x = " + STRING(xpos) + "; y = " + STRING(ypos), DebugSeverityLevel::OK);
+	*/
 
 	updateMousePosition(xpos, ypos);
 }
@@ -61,8 +66,8 @@ void UserControls::mouseButtonInput(GLFWwindow* window, int button, int action, 
 
 void UserControls::determineMovementDirection(const KeyboardCommand& kbCommand)
 {
-	glm::vec3 cameraForward = glm::vec3((*__userCamera).getForwardVector());
-	glm::vec3 cameraRight = glm::vec3((*__userCamera).getRightVector());
+	glm::vec3 forward = glm::vec3(0.0f, 1.0f, 0.0f);
+	glm::vec3 right = glm::vec3(1.0f, 0.0f, 0.0f);
 
 	float directionVecLength = glm::length(__movementDirection);
 
@@ -70,38 +75,38 @@ void UserControls::determineMovementDirection(const KeyboardCommand& kbCommand)
 	{
 		if (kbCommand.keyPressed == GLFW_KEY_W)
 		{
-			__movementDirection -= cameraForward;
+			__movementDirection += forward;
 		}
 		else if (kbCommand.keyPressed == GLFW_KEY_S)
 		{
-			__movementDirection += cameraForward;
+			__movementDirection -= forward;
 		}
 		else if (kbCommand.keyPressed == GLFW_KEY_D)
 		{
-			__movementDirection -= cameraRight;
+			__movementDirection += right;
 		}
 		else if (kbCommand.keyPressed == GLFW_KEY_A)
 		{
-			__movementDirection += cameraRight;
+			__movementDirection -= right;
 		}
 	}
 	else if (kbCommand.action == GLFW_RELEASE)
 	{
 		if (kbCommand.keyPressed == GLFW_KEY_W)
 		{
-			__movementDirection += cameraForward;
+			__movementDirection -= forward;
 		}
 		else if (kbCommand.keyPressed == GLFW_KEY_S)
 		{
-			__movementDirection -= cameraForward;
+			__movementDirection += forward;
 		}
 		else if (kbCommand.keyPressed == GLFW_KEY_D)
 		{
-			__movementDirection += cameraRight;
+			__movementDirection -= right;
 		}
 		else if (kbCommand.keyPressed == GLFW_KEY_A)
 		{
-			__movementDirection -= cameraRight;
+			__movementDirection += right;
 		}
 	}
 }
@@ -138,19 +143,21 @@ void UserControls::movementCalculation(const KeyboardCommand& kbCommand, float d
 {
 	determineMovementDirection(kbCommand);
 
-	const auto& cameraSpeed = __userCamera->getSpeed();
-	__userCamera->move(deltaTime * cameraSpeed * __movementDirection);
+	if (glm::length(__movementDirection) >= 0.95f)
+	{
+		__userCamera->move(deltaTime * __movementDirection);
+	}
 }
 
 void UserControls::rotationCalculation(const MouseCommand& mouseCommand, float deltaTime)
 {
 	determineRotationActivated(mouseCommand);
 
-	if (__rotationEnabled)
+	if (__rotationEnabled && __mousePos.hasMoved())
 	{
 		glm::vec2 prevToNew = __mousePos.currentPos - __mousePos.previousPos;
-		const auto& camSens = __userCamera->getSensitivity();
-		__userCamera->rotate(deltaTime * camSens * glm::vec3(prevToNew.y, prevToNew.x, 0.0f));
+
+		__userCamera->rotate(deltaTime * glm::vec3(prevToNew.y, prevToNew.x, 0.0f));
 	}
 }
 
@@ -158,7 +165,7 @@ void UserControls::determineRotationActivated(const MouseCommand& mouseCommand)
 {
 	if (mouseCommand.buttonPressed == GLFW_MOUSE_BUTTON_LEFT)
 	{
-		if (mouseCommand.action == GLFW_PRESS || mouseCommand.action == GLFW_REPEAT)
+		if (mouseCommand.action == GLFW_PRESS)
 		{
 			__rotationEnabled = true;
 		}

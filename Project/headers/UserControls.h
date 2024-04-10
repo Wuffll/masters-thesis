@@ -11,6 +11,11 @@ struct MousePosition
 {
 	glm::vec2 currentPos = { 0.0f, 0.0f };
 	glm::vec2 previousPos = { 0.0f, 0.0f };
+
+	bool hasMoved() const
+	{
+		return !((abs(currentPos.x - previousPos.x) <= 0.00001f) && (abs(currentPos.y - previousPos.y) <= 0.00001f));
+	}
 };
 
 class UserControls
@@ -40,7 +45,10 @@ private:
 
 	static GLFWwindow* __appWindow;
 	static CommandHistory __commandHistory;
+
 	static glm::vec3 __movementDirection;
+	static bool __movementEnabled;
+
 	static bool __rotationEnabled;
 	static MousePosition __mousePos;
 
