@@ -1,8 +1,17 @@
 #include "FPSManager.h"
 
+#include <GLFW/glfw3.h>
+#include <thread>
+
 #include "Debug.h"
 
 double FPSManager::__applicationFPS = 0.0;
+
+FPSManager::FPSManager(float targetFps)
+    :
+    m_TargetFps(targetFps)
+{
+}
 
 void FPSManager::startFrame()
 {
@@ -11,9 +20,19 @@ void FPSManager::startFrame()
 
 void FPSManager::endFrame()
 {
-    m_Timer.stop();
+    float frameTime = m_Timer.stop();
 
-    __applicationFPS = calculateFps(m_Timer.getTimeElapsed());
+    float delta = (1.0f / m_TargetFps) - frameTime;
+    
+    if (delta >= 0.0001f)
+    {
+        unsigned int microseconds = delta * 1000000.0f;
+        std::this_thread::sleep_for(std::chrono::microseconds(microseconds));
+
+        frameTime += delta;
+    }
+
+    __applicationFPS = calculateFps(frameTime);
 }
 
 const double& FPSManager::getFps()
@@ -21,9 +40,14 @@ const double& FPSManager::getFps()
     return __applicationFPS;
 }
 
-const Stopwatch& FPSManager::getTimer() const
+const float& FPSManager::getFrameTime() const
 {
-    return m_Timer;
+    return 1.0f / __applicationFPS;
+}
+
+void FPSManager::setTargetFps(float targetFps)
+{
+    m_TargetFps = targetFps;
 }
 
 double FPSManager::calculateFps(const double& timeElapsed)

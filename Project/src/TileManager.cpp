@@ -53,6 +53,15 @@ void TileManager::draw() const
 	glDrawElements(m_VAO.getDrawingMode(), m_pIBO->getIndicesCount(), GL_UNSIGNED_INT, 0);
 }
 
+void TileManager::tick()
+{
+	double xPos = floor(m_User.camera->getPosition().x) - m_TileMapInfo.columns / 2.0f; // Tiles are 1x1 so no need for mutliplication
+	double yPos = floor(m_User.camera->getPosition().z) - m_TileMapInfo.rows / 2.0f;
+
+	m_User.positionTileIndex = yPos * m_TileMapInfo.columns + xPos;
+	Debug::printMessage(*this, "Player position -> (" + STRING(xPos) + ", " + STRING(yPos) + ")", DebugSeverityLevel::OK);
+}
+
 void TileManager::setTileScaling(const glm::vec3& scale)
 {
 	m_ScalingVec = scale;
@@ -82,6 +91,16 @@ const Tile& TileManager::getTile(const unsigned int& x, const unsigned int& y) c
 const std::vector<Tile>& TileManager::getTiles() const
 {
 	return m_Tiles;
+}
+
+void TileManager::setUser(Camera& camera)
+{
+	m_User.camera = &camera;
+
+	double xPos = floor(camera.getPosition().x); // Tiles are 1x1 so no need for mutliplication
+	double yPos = floor(camera.getPosition().z);
+
+	m_User.positionTileIndex = yPos * m_TileMapInfo.columns + xPos;
 }
 
 void TileManager::generateTiles(const Image* heightmap)

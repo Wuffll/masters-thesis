@@ -40,8 +40,8 @@ private:
 	glm::vec3 m_UpVec = { 0.0f, 1.0f, 0.0f };
 	glm::vec3 m_RightVec = { 1.0f, 0.0f, 0.0f };
 
-	float m_Speed = 500.0f;
-	float m_Sensitivity = 300.0f;
+	float m_Speed = 250.0f;
+	float m_Sensitivity = 50.0f;
 
 	Shader* m_pShader;
 	bool m_HasChanged = false;

@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 
 #include "Drawable.h"
+#include "Camera.h"
 #include "Image.h"
 #include "Tile.h"
 #include "VertexFormatLayout.h"
@@ -20,6 +21,12 @@ struct TileMapStructure
 	unsigned int rows = 0;
 };
 
+struct UserPosition
+{
+	Camera* camera;
+	unsigned int positionTileIndex;
+};
+
 class TileManager : public Drawable
 {
 public:
@@ -30,6 +37,8 @@ public:
 
 	void draw() const;
 
+	void tick();
+
 	void setTileScaling(const glm::vec3& scale);
 	const glm::vec3& getTileScaling() const;
 
@@ -38,6 +47,8 @@ public:
 
 	const Tile& getTile(const unsigned int& x, const unsigned int& y) const;
 	const std::vector<Tile>& getTiles() const;
+
+	void setUser(Camera& camera);
 
 	void setTileActive(Tile* active);
 	void setTileActive(const unsigned int& index);
@@ -83,7 +94,8 @@ private:
 	glm::mat4 m_ScalingMat;
 	glm::vec3 m_ScalingVec;
 
-	
+	UserPosition m_User;
+
 	std::vector<Tile> m_Tiles;
 	Tile* m_ActiveTile = nullptr;
 

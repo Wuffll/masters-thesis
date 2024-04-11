@@ -13,6 +13,7 @@ public:
 	void start();
 	const double& stop();
 	const double& lap();
+	const double& checkpoint();
 
 	const bool& hasStarted() const;
 

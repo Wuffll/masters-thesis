@@ -8,7 +8,7 @@ using dsec = std::chrono::duration<double>;
 void Stopwatch::start()
 {
 	if (m_HasStarted)
-		Debug::printMessage(*this, "Restarting stopwatch!", DebugSeverityLevel::LOW);
+		Debug::printMessage(*this, "Restarting stopwatch!", DebugSeverityLevel::MEDIUM);
 
 	m_Start = CLOCK::now();
 
@@ -42,6 +42,17 @@ const double& Stopwatch::lap()
 	m_TimeElapsed = durationInSeconds.count();
 
 	m_Start = m_End;
+
+	return m_TimeElapsed;
+}
+
+const double& Stopwatch::checkpoint()
+{
+	m_End = CLOCK::now();
+
+	dsec durationInSeconds = m_End - m_Start;
+
+	m_TimeElapsed = durationInSeconds.count();
 
 	return m_TimeElapsed;
 }

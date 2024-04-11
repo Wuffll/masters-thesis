@@ -8,6 +8,7 @@
 #include <string>
 #include <filesystem>
 #include <Windows.h>
+#include <thread>
 
 #include "Shader.h"
 #include "Image.h"
@@ -31,9 +32,6 @@ GLFWwindow* initWindow(const int& width, const int& height, const std::string& w
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 720
 
-#define MAX(x,y) ((x)>(y) ? (x) : (y))
-
-
 int main(void)
 {
     std::string workingDirectory = std::filesystem::current_path().string();
@@ -42,7 +40,6 @@ int main(void)
 
     GLFWwindow* window = initWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Application");
     Camera userCamera;
-
     UserControls::initUserControls(window, &userCamera);
  
     Shader defaultShader(workingDirectory + "\\Resources\\shaders\\default.glsl"); // if you run from RenderDoc, remember to update the shaders in the shader file in the build folder
@@ -50,8 +47,11 @@ int main(void)
     Image heightmap = Image(workingDirectory + "\\Resources\\heightmaps\\snowdon.png");
     heightmap.convertToGrayscale();
 
-    TileManager manager(heightmap, 350.0f);
+    // TileManager manager(heightmap, 350.0f);
+    TileManager manager(32, 32, 200);
+    manager.setUser(userCamera);
 
+    userCamera.setPosition({ 0.0f, 20.0f, 0.0f });
     userCamera.setShader(&defaultShader);
 
     glm::mat4 projMat = glm::perspective(45.0f, 1.0f, 0.1f, 3000.0f);
@@ -61,14 +61,18 @@ int main(void)
     defaultShader.setUniformMatrix4f("uProjection", projMat);
     defaultShader.setUniformMatrix4f("uModel", modelMat);
 
-    FPSManager fpsManager;
+    float targetFps = 144.0f;
+    FPSManager fpsManager(targetFps);
 
     float frameTime = 0.0f, elapsedTime = 0.0f, interval = 5.0f;
 
-    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
+        UserControls::tick(frameTime);
+        manager.tick();
+
         fpsManager.startFrame();
 
         if (interval <= 0.0f)
@@ -86,22 +90,19 @@ int main(void)
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
 
-        // userCamera.rotate(frameTime * angle);
+        fpsManager.endFrame();
+        frameTime = fpsManager.getFrameTime();
+
         userCamera.updateTranform();
+
         /* Poll for and process events */
         glfwPollEvents();
 
-        fpsManager.endFrame();
-
-        frameTime = fpsManager.getTimer().getTimeElapsed();
         elapsedTime += frameTime;
         interval -= frameTime;
-
-        UserControls::tick(frameTime);
     }
 
     glfwTerminate();
-
     return 0;
 }
 
