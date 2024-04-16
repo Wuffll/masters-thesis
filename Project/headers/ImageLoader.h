@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "Image.h"
+#include "ImageInfo.h"
 
 class ImageLoader
 {

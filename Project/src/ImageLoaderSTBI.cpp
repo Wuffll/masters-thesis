@@ -16,11 +16,11 @@ ImageInfo ImageLoaderSTBI::loadFromFile(const std::string& filePath)
 
 	const unsigned int imagePixelNum = output.getPixelNum();
 
-	output.data.assign(imageData, imageData + imagePixelNum);
+	output.image.assign(imageData, imageData + imagePixelNum);
 
 	stbi_image_free(imageData);
 
-	if (!output.data.data())
+	if (!output.image.data())
 		printf("WARNING (ImageLoaderSTBI.hpp): Loading an image (%s) was unsuccessful!", filePath.c_str());
 
 	return output;

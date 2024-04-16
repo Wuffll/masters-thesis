@@ -43,7 +43,7 @@ void Image::loadImage()
 		m_ImageInfo.free();
 		m_ImageInfo = m_pImageLoader->loadFromFile(m_filePath);
 
-		m_ImageLoaded = (!m_ImageInfo.data.data()) ? false : true;
+		m_ImageLoaded = (!m_ImageInfo.image.data()) ? false : true;
 	}
 
 	if (m_ImageLoaded)
@@ -59,7 +59,7 @@ const ImageInfo& Image::getImageInfo() const
 
 const std::vector<Pixel>& Image::getImageData() const
 {
-	return m_ImageInfo.data;
+	return m_ImageInfo.image;
 }
 
 void Image::convertToGrayscale()
@@ -67,10 +67,10 @@ void Image::convertToGrayscale()
 	unsigned char calculatedColor = 0;
 	for (int i = 0; i < m_ImageInfo.getPixelNum(); i++)
 	{
-		calculatedColor = (m_ImageInfo.data[i].R + m_ImageInfo.data[i].G + m_ImageInfo.data[i].B) / 3;
-		m_ImageInfo.data[i].R = calculatedColor;
-		m_ImageInfo.data[i].G = calculatedColor;
-		m_ImageInfo.data[i].B = calculatedColor;
+		calculatedColor = (m_ImageInfo.image[i].R + m_ImageInfo.image[i].G + m_ImageInfo.image[i].B) / 3;
+		m_ImageInfo.image[i].R = calculatedColor;
+		m_ImageInfo.image[i].G = calculatedColor;
+		m_ImageInfo.image[i].B = calculatedColor;
 	}
 }
 
@@ -82,9 +82,9 @@ std::vector<PixelFloat> Image::createNormalized01() const
 	for (int i = 0; i < m_ImageInfo.getPixelNum(); i++)
 	{
 		PixelFloat pixel;
-		pixel.R = (float)m_ImageInfo.data[i].R / 255.0f;
-		pixel.G = (float)m_ImageInfo.data[i].G / 255.0f;
-		pixel.B = (float)m_ImageInfo.data[i].B / 255.0f;
+		pixel.R = (float)m_ImageInfo.image[i].R / 255.0f;
+		pixel.G = (float)m_ImageInfo.image[i].G / 255.0f;
+		pixel.B = (float)m_ImageInfo.image[i].B / 255.0f;
 
 		outputVector.push_back(pixel);
 	}

@@ -101,10 +101,12 @@
     <ClCompile Include="src\Stopwatch.cpp" />
     <ClCompile Include="src\CommandHistory.cpp" />
     <ClCompile Include="src\UserControls.cpp" />
+    <ClCompile Include="src\Window.cpp" />
     <ClInclude Include="headers\FPSManager.h" />
     <ClInclude Include="headers\Camera.h" />
     <ClInclude Include="headers\Debug.h" />
     <ClInclude Include="headers\Drawable.h" />
+    <ClInclude Include="headers\ImageInfo.h" />
     <ClInclude Include="headers\ImageLoaderSTBI.h" />
     <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Main.cpp" />
@@ -123,6 +125,7 @@
     <ClInclude Include="headers\Stopwatch.h" />
     <ClInclude Include="headers\CommandHistory.h" />
     <ClInclude Include="headers\UserControls.h" />
+    <ClInclude Include="headers\Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\Image.h" />
