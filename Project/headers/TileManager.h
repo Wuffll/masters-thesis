@@ -35,6 +35,9 @@
 * Neighboring tiles share the vertex column between them.
 * Therefore, for AxB grid there are (A + 1) vertex columns and (B + 1) vertex rows (smallest grid is 1x1).
 * 
+* So, if you are wondering why there is a (tileColumns + 1) in the initIndices function, it is because
+* of this fact: if the grid consists of 5 horizontal tiles (tileColumns = 5) then there is 5 + 1 (tileColumns + 1)
+* vertex columns.
 */
 
 struct TileGridInfo
@@ -101,8 +104,6 @@ private:
 
 	TileGridInfo m_TileMapInfo;
 
-	unsigned int m_Width; // num of horizontal VERTICES (NOT Tiles)
-	unsigned int m_Depth; // num of vertical VERTICES (NOT Tiles)
 	float m_MaxHeight;
 	glm::mat4 m_ScalingMat;
 	glm::vec3 m_ScalingVec;

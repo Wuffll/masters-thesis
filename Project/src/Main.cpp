@@ -33,8 +33,8 @@ int main(void)
     Image heightmap = Image(workingDirectory + "\\Resources\\heightmaps\\snowdon.png");
     heightmap.convertToGrayscale();
 
-    // TileManager manager(heightmap, 350.0f);
-    TileManager manager(2048, 2048, 200);
+    TileManager manager(heightmap, 350.0f);
+    // TileManager manager(1081, 1081, 200);
 
     userController.AddSubscriber(manager);
 
@@ -44,7 +44,7 @@ int main(void)
     defaultShader.setUniformMatrix4f("uModel", modelMat);
 
     float targetFps = 200.0f;
-    FPSManager fpsManager(1000.0f);
+    FPSManager fpsManager(targetFps);
 
     float frameTime = 0.0f, elapsedTime = 0.0f, interval = 5.0f;
 
@@ -52,6 +52,9 @@ int main(void)
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window.getWindowPointer()))
     {
+        // Frame start
+        fpsManager.startFrame();
+
         UserInputRegistry::tick(frameTime);
         userController.tick(frameTime);
 
@@ -61,9 +64,6 @@ int main(void)
             interval = 5.0f;
         }
 
-        // Frame start
-        fpsManager.startFrame();
-
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -72,13 +72,13 @@ int main(void)
         /* Swap front and back buffers */
         glfwSwapBuffers(window.getWindowPointer());
 
+        /* Poll for and process events */
+        glfwPollEvents();
+
         // Frame end
         fpsManager.endFrame();
 
         frameTime = fpsManager.getFrameTime();
-
-        /* Poll for and process events */
-        glfwPollEvents();
 
         elapsedTime += frameTime;
         interval -= frameTime;

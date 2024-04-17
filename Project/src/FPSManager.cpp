@@ -26,7 +26,7 @@ void FPSManager::endFrame()
     
     if (delta >= 0.0001f)
     {
-        unsigned int microseconds = delta * 1000000.0f;
+        unsigned int microseconds = delta * 1000000;
         std::this_thread::sleep_for(std::chrono::microseconds(microseconds));
 
         frameTime += delta;

@@ -6,8 +6,6 @@
 
 TileManager::TileManager()
 	:
-	m_Width(DEFAULT_TILE_GRID_SIZE + 1),
-	m_Depth(DEFAULT_TILE_GRID_SIZE + 1),
 	m_TileMapInfo({ DEFAULT_TILE_GRID_SIZE, DEFAULT_TILE_GRID_SIZE }),
 	m_MaxHeight(DEFAULT_MAX_HEIGHT),
 	m_pVBO(new VertexBufferGL()),
@@ -19,8 +17,6 @@ TileManager::TileManager()
 
 TileManager::TileManager(const unsigned int& width, const unsigned int& height, const float& maxHeight)
 	:
-	m_Width(width + 1),
-	m_Depth(height + 1),
 	m_TileMapInfo({ width, height }),
 	m_MaxHeight(maxHeight),
 	m_pVBO(new VertexBufferGL()),
@@ -35,8 +31,6 @@ TileManager::TileManager(const unsigned int& width, const unsigned int& height, 
 
 TileManager::TileManager(const Image& heightmap, const float& maxHeight)
 	:
-	m_Width(heightmap.getImageInfo().width),
-	m_Depth(heightmap.getImageInfo().height),
 	m_TileMapInfo({(unsigned int) heightmap.getImageInfo().width - 1, (unsigned int) heightmap.getImageInfo().height - 1}),
 	m_MaxHeight(maxHeight),
 	m_pVBO(new VertexBufferGL()),
@@ -74,17 +68,17 @@ const glm::vec3& TileManager::getTileScaling() const
 
 const unsigned int& TileManager::getWidth() const
 {
-	return m_Width;
+	return m_TileMapInfo.columns;
 }
 
 const unsigned int& TileManager::getHeight() const
 {
-	return m_Depth;
+	return m_TileMapInfo.rows;
 }
 
 const Tile& TileManager::getTile(const unsigned int& x, const unsigned int& y) const
 {
-	return m_Tiles[x * m_Width + y];
+	return m_Tiles[x * m_TileMapInfo.columns + y];
 }
 
 const std::vector<Tile>& TileManager::getTiles() const
@@ -105,7 +99,10 @@ void TileManager::generateTiles(const Image* heightmap)
 
 void TileManager::initVertices(const Image* heightmap)
 {
-	const unsigned int totalNumVertices = m_Width * m_Depth;
+	unsigned int vertexColumns = m_TileMapInfo.columns + 1;
+	unsigned int vertexRows = m_TileMapInfo.rows + 1;
+
+	const unsigned int totalNumVertices = vertexColumns * vertexRows;
 	m_VertexData.resize(totalNumVertices);
 
 	initVertexPositions(heightmap);
@@ -115,17 +112,20 @@ void TileManager::initVertices(const Image* heightmap)
 
 void TileManager::initVertexPositions(const Image* heightmap)
 {
+	unsigned int vertexColumns = m_TileMapInfo.columns + 1;
+	unsigned int vertexRows = m_TileMapInfo.rows + 1;
+
 	glm::vec3 position;
 
 	unsigned int index = 0;
-	for (unsigned int z = 0; z < m_Depth; z++)
+	for (unsigned int z = 0; z < vertexRows; z++)
 	{
-		for (unsigned int x = 0; x < m_Width; x++)
+		for (unsigned int x = 0; x < vertexColumns; x++)
 		{
-			index = z * m_Width + x;
+			index = z * vertexColumns + x;
 
-			position.x = ((float)x - m_Width / 2.0f);
-			position.z = ((float)z - m_Depth / 2.0f);
+			position.x = ((float)x - vertexColumns / 2.0f);
+			position.z = ((float)z - vertexRows / 2.0f);
 
 			if (heightmap)
 			{
@@ -143,50 +143,53 @@ void TileManager::initVertexPositions(const Image* heightmap)
 
 void TileManager::initVertexNormals()
 {
+	unsigned int vertexColumns = m_TileMapInfo.columns + 1;
+	unsigned int vertexRows = m_TileMapInfo.rows + 1;
+
 	unsigned int u, ur, r, b, bl, l; // adjecent vertices: up, upper right, right, ...
 	const glm::vec3* pUPos = 0, * pURPos = 0, * pRPos = 0, * pBPos = 0, * pBLPos = 0, * pLPos = 0;
 
 	glm::vec3 normal;
 	unsigned int index = 0;
-	for (unsigned int z = 0; z < m_Depth; z++)
+	for (unsigned int z = 0; z < vertexRows; z++)
 	{
-		for (unsigned int x = 0; x < m_Width; x++)
+		for (unsigned int x = 0; x < vertexColumns; x++)
 		{
-			index = z * m_Width + x;
+			index = z * vertexColumns + x;
 
-			if (z < m_Depth - 1)
+			if (z < vertexRows - 1)
 			{
-				u = (z + 1) * m_Width + x;
+				u = (z + 1) * vertexColumns + x;
 				pUPos = &m_VertexData[u].first;
 
-				if (x < m_Width - 1)
+				if (x < vertexColumns - 1)
 				{
-					ur = (z + 1) * m_Width + (x + 1);
+					ur = (z + 1) * vertexColumns + (x + 1);
 					pURPos = &m_VertexData[ur].first;
 				}
 			}
 
 			if (z > 0)
 			{
-				b = (z - 1) * m_Width + x;
+				b = (z - 1) * vertexColumns + x;
 				pBPos = &m_VertexData[b].first;
 
 				if (x > 0)
 				{
-					bl = (z - 1) * m_Width + (x - 1);
+					bl = (z - 1) * vertexColumns + (x - 1);
 					pBLPos = &m_VertexData[bl].first;
 				}
 			}
 
 			if (x > 0)
 			{
-				l = z * m_Width + (x - 1);
+				l = z * vertexColumns + (x - 1);
 				pLPos = &m_VertexData[l].first;
 			}
 
-			if (x < m_Width - 1)
+			if (x < vertexColumns - 1)
 			{
-				r = z * m_Width + (x + 1);
+				r = z * vertexColumns + (x + 1);
 				pRPos = &m_VertexData[r].first;
 			}
 
@@ -256,12 +259,15 @@ void TileManager::initVertexTexCoords()
 {
 	// TODO : Currently using it for color
 
+	unsigned int vertexColumns = m_TileMapInfo.columns + 1;
+	unsigned int vertexRows = m_TileMapInfo.rows + 1;
+
 	unsigned int index = 0;
-	for (unsigned int z = 0; z < m_Depth; z++)
+	for (unsigned int z = 0; z < vertexRows; z++)
 	{
-		for (unsigned int x = 0; x < m_Width; x++)
+		for (unsigned int x = 0; x < vertexColumns; x++)
 		{
-			index = z * m_Width + x;
+			index = z * vertexColumns + x;
 
 			m_VertexData[index].third = DEFAULT_TILE_COLOR;
 		}
@@ -270,21 +276,21 @@ void TileManager::initVertexTexCoords()
 
 void TileManager::initIndices()
 {
-	const unsigned int totalNumIndices = (m_Width - 1) * (m_Depth - 1) * NUM_OF_INDICES_PER_TILE;
-	m_IndexData.reserve(totalNumIndices);
-
 	const auto& tileColumns = m_TileMapInfo.columns;
 	const auto& tileRows = m_TileMapInfo.rows;
+
+	const unsigned int totalNumIndices = tileColumns * tileRows * NUM_OF_INDICES_PER_TILE;
+	m_IndexData.reserve(totalNumIndices);
 
 	for (unsigned int z = 0; z < tileRows; z++)
 	{
 		unsigned int bottomLeft, topLeft, topRight, bottomRight;
 		for (unsigned int x = 0; x < tileColumns; x++)
 		{
-			bottomLeft = z * m_Width + x;
-			topLeft = (z + 1) * m_Width + x;
-			topRight = (z + 1) * m_Width + (x + 1);
-			bottomRight = z * m_Width + (x + 1);
+			bottomLeft = z * (tileColumns + 1) + x;
+			topLeft = (z + 1) * (tileColumns + 1) + x;
+			topRight = (z + 1) * (tileColumns + 1) + (x + 1);
+			bottomRight = z * (tileColumns + 1) + (x + 1);
 
 			// top triangle
 			m_IndexData.push_back(bottomLeft);
