@@ -12,7 +12,7 @@ TileManager::TileManager()
 	m_MaxHeight(DEFAULT_MAX_HEIGHT),
 	m_pVBO(new VertexBufferGL()),
 	m_pIBO(new IndexBufferGL()),
-	m_VAO({})
+	m_VAO(VertexArray())
 {
 	generateTiles();
 }
@@ -25,7 +25,7 @@ TileManager::TileManager(const unsigned int& width, const unsigned int& height, 
 	m_MaxHeight(maxHeight),
 	m_pVBO(new VertexBufferGL()),
 	m_pIBO(new IndexBufferGL()),
-	m_VAO({})
+	m_VAO(VertexArray())
 {
 	if (width == 0 || height == 0)
 		Debug::throwException(*this, "Width and height both must be greater than 0!");
@@ -41,7 +41,7 @@ TileManager::TileManager(const Image& heightmap, const float& maxHeight)
 	m_MaxHeight(maxHeight),
 	m_pVBO(new VertexBufferGL()),
 	m_pIBO(new IndexBufferGL()),
-	m_VAO({})
+	m_VAO(VertexArray())
 {
 	generateTiles(&heightmap);
 }
@@ -53,12 +53,11 @@ void TileManager::draw() const
 	glDrawElements(m_VAO.getDrawingMode(), m_pIBO->getIndicesCount(), GL_UNSIGNED_INT, 0);
 }
 
-void TileManager::tick()
+void TileManager::userPositionUpdate(const glm::vec3& position)
 {
-	double xPos = floor(m_User.camera->getPosition().x) - m_TileMapInfo.columns / 2.0f; // Tiles are 1x1 so no need for mutliplication
-	double yPos = floor(m_User.camera->getPosition().z) - m_TileMapInfo.rows / 2.0f;
+	double xPos = floor(position.x) - m_TileMapInfo.columns / 2.0f; // Tiles are 1x1 so no need for mutliplication
+	double yPos = floor(position.z) - m_TileMapInfo.rows / 2.0f;
 
-	m_User.positionTileIndex = yPos * m_TileMapInfo.columns + xPos;
 	Debug::printMessage(*this, "Player position -> (" + STRING(xPos) + ", " + STRING(yPos) + ")", DebugSeverityLevel::OK);
 }
 
@@ -93,16 +92,6 @@ const std::vector<Tile>& TileManager::getTiles() const
 	return m_Tiles;
 }
 
-void TileManager::setUser(Camera& camera)
-{
-	m_User.camera = &camera;
-
-	double xPos = floor(camera.getPosition().x); // Tiles are 1x1 so no need for mutliplication
-	double yPos = floor(camera.getPosition().z);
-
-	m_User.positionTileIndex = yPos * m_TileMapInfo.columns + xPos;
-}
-
 void TileManager::generateTiles(const Image* heightmap)
 {
 	initVertices(heightmap);
@@ -123,7 +112,6 @@ void TileManager::initVertices(const Image* heightmap)
 	initVertexNormals();
 	initVertexTexCoords();
 }
-
 
 void TileManager::initVertexPositions(const Image* heightmap)
 {
@@ -207,8 +195,6 @@ void TileManager::initVertexNormals()
 			m_VertexData[index].second = normal;
 		}
 	}
-
-
 }
 
 glm::vec3 TileManager::calculateNormal(const glm::vec3* pUPos, const glm::vec3* pURPos, 
@@ -430,8 +416,6 @@ void TileManager::setTileActive(const unsigned int& index)
 
 	changeTileColor(m_ActiveTile, ACTIVE_TILE_COLOR);
 }
-
-
 
 void TileManager::changeTileColor(Tile* active, const glm::vec3& color)
 {

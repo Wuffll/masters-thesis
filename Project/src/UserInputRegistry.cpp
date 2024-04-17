@@ -1,33 +1,33 @@
-#include "UserControls.h"
+#include "UserInputRegistry.h"
 
 #include "Debug.h"
 #include "FPSManager.h"
 
-GLFWwindow* UserControls::__appWindow = nullptr;
-CommandHistory UserControls::__commandHistory;
+GLFWwindow* UserInputRegistry::__appWindow = nullptr;
+CommandHistory UserInputRegistry::__commandHistory;
 
-glm::vec3 UserControls::__movementDirection = {0.0f, 0.0f, 0.0f};
-bool UserControls::__movementEnabled = false;
+glm::vec3 UserInputRegistry::__movementDirection = {0.0f, 0.0f, 0.0f};
+bool UserInputRegistry::__movementEnabled = false;
 
-bool UserControls::__rotationEnabled = false;
-MousePosition UserControls::__mousePos;
+bool UserInputRegistry::__rotationEnabled = false;
+MousePosition UserInputRegistry::__mousePos;
 
-Camera* UserControls::__userCamera = nullptr;
+Controller* UserInputRegistry::__user = nullptr;
 
-void UserControls::initUserControls(GLFWwindow* window, Camera* userCamera)
+void UserInputRegistry::initUserControls(GLFWwindow* window, Controller* user)
 {
 	__appWindow = window;
-	__userCamera = userCamera;
+	__user = user;
 
 	glfwSetKeyCallback(window, keyboardInput);
 	glfwSetCursorPosCallback(window, mousePosInput);
 	glfwSetMouseButtonCallback(window, mouseButtonInput);
 }
 
-void UserControls::tick(const float& deltaTime)
+void UserInputRegistry::tick(const float& deltaTime)
 {
-	if (__userCamera == nullptr)
-		Debug::throwException(UserControls(),
+	if (__user == nullptr)
+		Debug::throwException(UserInputRegistry(),
 							  "UserControls not initialized! (use function initUserControls())");
 
 	const auto& kbCommand = __commandHistory.getNextKeyboardCommand();
@@ -37,34 +37,36 @@ void UserControls::tick(const float& deltaTime)
 	processMouseCommand(mouseCommand, deltaTime);
 }
 
-void UserControls::keyboardInput(GLFWwindow* window, int key, int scancode, int action, int mods)
+void UserInputRegistry::keyboardInput(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	Debug::printMessage(UserControls(), "Key pressed: " + STRING(key) + "; Action = " + STRING(action), DebugSeverityLevel::OK);
-	Debug::printMessage(UserControls(), "GLFW_PRESS = " + STRING(GLFW_PRESS), DebugSeverityLevel::OK);
+	Debug::printMessage(UserInputRegistry(), "Key pressed: " + STRING(key) + "; Action = " + STRING(action), DebugSeverityLevel::OK);
+	Debug::printMessage(UserInputRegistry(), "GLFW_PRESS = " + STRING(GLFW_PRESS), DebugSeverityLevel::OK);
 
 	if(action != GLFW_REPEAT)
 		__commandHistory.addNewKeyboardCommand(key, action);
 }
 
-void UserControls::mousePosInput(GLFWwindow* window, double xpos, double ypos)
+void UserInputRegistry::mousePosInput(GLFWwindow* window, double xpos, double ypos)
 {
 	/*
-	Debug::printMessage(UserControls(), 
-		"Mouse pos: x = " + STRING(xpos) + "; y = " + STRING(ypos), DebugSeverityLevel::OK);
+	Debug::printMessage(
+		UserInputRegistry(), 
+		"Mouse pos: x = " + STRING(xpos) + "; y = " + STRING(ypos), 
+		DebugSeverityLevel::OK);
 	*/
 
 	updateMousePosition(xpos, ypos);
 }
 
-void UserControls::mouseButtonInput(GLFWwindow* window, int button, int action, int mods)
+void UserInputRegistry::mouseButtonInput(GLFWwindow* window, int button, int action, int mods)
 {
-	Debug::printMessage(UserControls(), "Mouse button: " + STRING(button), DebugSeverityLevel::OK);
+	Debug::printMessage(UserInputRegistry(), "Mouse button: " + STRING(button), DebugSeverityLevel::OK);
 
 	if(action != GLFW_REPEAT)
 		__commandHistory.addNewMouseCommand(button, action);
 }
 
-void UserControls::determineMovementDirection(const KeyboardCommand& kbCommand)
+void UserInputRegistry::determineMovementDirection(const KeyboardCommand& kbCommand)
 {
 	glm::vec3 forward = glm::vec3(0.0f, 1.0f, 0.0f);
 	glm::vec3 right = glm::vec3(1.0f, 0.0f, 0.0f);
@@ -111,20 +113,20 @@ void UserControls::determineMovementDirection(const KeyboardCommand& kbCommand)
 	}
 }
 
-void UserControls::updateMousePosition(const double& xpos, const double& ypos)
+void UserInputRegistry::updateMousePosition(const double& xpos, const double& ypos)
 {
 	__mousePos.previousPos = __mousePos.currentPos;
 	__mousePos.currentPos.x = xpos;
 	__mousePos.currentPos.y = ypos;
 }
 
-void UserControls::processKeyboardCommand(const KeyboardCommand& kbCommand, const float& deltaTime)
+void UserInputRegistry::processKeyboardCommand(const KeyboardCommand& kbCommand, const float& deltaTime)
 {
 	shouldWindowClose(kbCommand);
 	movementCalculation(kbCommand, deltaTime);
 }
 
-void UserControls::shouldWindowClose(const KeyboardCommand& kbCommand)
+void UserInputRegistry::shouldWindowClose(const KeyboardCommand& kbCommand)
 {
 	if (kbCommand.keyPressed == GLFW_KEY_ESCAPE)
 	{
@@ -132,24 +134,24 @@ void UserControls::shouldWindowClose(const KeyboardCommand& kbCommand)
 	}
 }
 
-void UserControls::processMouseCommand(const MouseCommand& mouseCommand, const float& deltaTime)
+void UserInputRegistry::processMouseCommand(const MouseCommand& mouseCommand, const float& deltaTime)
 {
 	rotationCalculation(mouseCommand, deltaTime);
 
 	__mousePos.previousPos = __mousePos.currentPos;
 }
 
-void UserControls::movementCalculation(const KeyboardCommand& kbCommand, float deltaTime)
+void UserInputRegistry::movementCalculation(const KeyboardCommand& kbCommand, float deltaTime)
 {
 	determineMovementDirection(kbCommand);
 
 	if (glm::length(__movementDirection) >= 0.95f)
 	{
-		__userCamera->move(deltaTime * __movementDirection);
+		__user->moveCamera(deltaTime * __movementDirection);
 	}
 }
 
-void UserControls::rotationCalculation(const MouseCommand& mouseCommand, float deltaTime)
+void UserInputRegistry::rotationCalculation(const MouseCommand& mouseCommand, float deltaTime)
 {
 	determineRotationActivated(mouseCommand);
 
@@ -157,11 +159,11 @@ void UserControls::rotationCalculation(const MouseCommand& mouseCommand, float d
 	{
 		glm::vec2 prevToNew = __mousePos.currentPos - __mousePos.previousPos;
 
-		__userCamera->rotate(deltaTime * glm::vec3(prevToNew.y, prevToNew.x, 0.0f));
+		__user->rotateCamera(deltaTime * glm::vec3(prevToNew.y, prevToNew.x, 0.0f));
 	}
 }
 
-void UserControls::determineRotationActivated(const MouseCommand& mouseCommand)
+void UserInputRegistry::determineRotationActivated(const MouseCommand& mouseCommand)
 {
 	if (mouseCommand.buttonPressed == GLFW_MOUSE_BUTTON_LEFT)
 	{

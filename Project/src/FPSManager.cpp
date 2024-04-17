@@ -42,7 +42,7 @@ const double& FPSManager::getFps()
 
 const float& FPSManager::getFrameTime() const
 {
-    return 1.0f / __applicationFPS;
+    return 1.0 / __applicationFPS;
 }
 
 void FPSManager::setTargetFps(float targetFps)

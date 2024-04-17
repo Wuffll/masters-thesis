@@ -10,7 +10,7 @@
 #include "TileManager.h"
 #include "Camera.h"
 #include "FPSManager.h"
-#include "UserControls.h"
+#include "UserInputRegistry.h"
 
 #include "Window.h"
 
@@ -24,30 +24,27 @@ int main(void)
     printf("Working directory: %s\n", workingDirectory.c_str());
 
     Window window;
-    Camera userCamera;
-    UserControls::initUserControls(window.getWindowPointer(), &userCamera);
  
     Shader defaultShader(workingDirectory + "\\Resources\\shaders\\default.glsl"); // if you run from RenderDoc, remember to update the shaders in the shader file in the build folder
+    
+    Controller userController({0.0f, 20.0f, 0.0f}, &defaultShader);
+    UserInputRegistry::initUserControls(window.getWindowPointer(), &userController);
 
     Image heightmap = Image(workingDirectory + "\\Resources\\heightmaps\\snowdon.png");
     heightmap.convertToGrayscale();
 
     // TileManager manager(heightmap, 350.0f);
-    TileManager manager(32, 32, 200);
-    manager.setUser(userCamera);
+    TileManager manager(2048, 2048, 200);
 
-    userCamera.setPosition({ 0.0f, 20.0f, 0.0f });
-    userCamera.setShader(&defaultShader);
+    userController.AddSubscriber(manager);
 
-    glm::mat4 projMat = glm::perspective(45.0f, 1.0f, 0.1f, 3000.0f);
     glm::mat4 modelMat(1.0f);
 
     defaultShader.bind();
-    defaultShader.setUniformMatrix4f("uProjection", projMat);
     defaultShader.setUniformMatrix4f("uModel", modelMat);
 
     float targetFps = 200.0f;
-    FPSManager fpsManager(targetFps);
+    FPSManager fpsManager(1000.0f);
 
     float frameTime = 0.0f, elapsedTime = 0.0f, interval = 5.0f;
 
@@ -55,10 +52,14 @@ int main(void)
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window.getWindowPointer()))
     {
-        UserControls::tick(frameTime);
-        manager.tick();
+        UserInputRegistry::tick(frameTime);
+        userController.tick(frameTime);
 
-        Debug::printMessage(fpsManager, "FPS = " + STRING(fpsManager.getFps()), DebugSeverityLevel::OK);
+        if (interval <= 0.0f)
+        {
+            Debug::printMessage(fpsManager, "FPS = " + STRING(fpsManager.getFps()), DebugSeverityLevel::OK);
+            interval = 5.0f;
+        }
 
         // Frame start
         fpsManager.startFrame();
@@ -75,8 +76,6 @@ int main(void)
         fpsManager.endFrame();
 
         frameTime = fpsManager.getFrameTime();
-
-        userCamera.updateTranform();
 
         /* Poll for and process events */
         glfwPollEvents();

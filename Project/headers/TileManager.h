@@ -4,6 +4,8 @@
 #include <glm/glm.hpp>
 
 #include "Drawable.h"
+#include "UserPositionSubscriber.h"
+
 #include "Camera.h"
 #include "Image.h"
 #include "Tile.h"
@@ -13,21 +15,35 @@
 #include "VertexArray.h"
 
 #define DEFAULT_TILE_GRID_SIZE 128
-#define DEFAULT_MAX_HEIGHT
+#define DEFAULT_MAX_HEIGHT 255
 
-struct TileMapStructure
+// TileGridInfo detailed explanation
+/* 
+*1st     2nd	 3rd	 4th vertex column
+*|		 |		 |		 |
+*v		 v		 v		 v
+* _______ _______ _______	<- 2nd vertex row
+*|      /|      /|      /|
+*|     / |     / |     / |
+*|    /  |    /  |    /  |
+*|   /   |   /   |   /   |
+*|  /    |  /    |  /    |
+*| /     | /     | /     |
+* ------- ------- -------	<- 1st
+*
+* Above is a 3x1 set of tiles which consists of 4 vertex columns. Each tile consists of 2 vertex columns.
+* Neighboring tiles share the vertex column between them.
+* Therefore, for AxB grid there are (A + 1) vertex columns and (B + 1) vertex rows (smallest grid is 1x1).
+* 
+*/
+
+struct TileGridInfo
 {
 	unsigned int columns = 0;
 	unsigned int rows = 0;
 };
 
-struct UserPosition
-{
-	Camera* camera;
-	unsigned int positionTileIndex;
-};
-
-class TileManager : public Drawable
+class TileManager : public Drawable, public UserPositionSubscriber
 {
 public:
 
@@ -36,8 +52,7 @@ public:
 	TileManager(const Image& heightmap, const float& maxHeight);
 
 	void draw() const;
-
-	void tick();
+	void userPositionUpdate(const glm::vec3& position);
 
 	void setTileScaling(const glm::vec3& scale);
 	const glm::vec3& getTileScaling() const;
@@ -47,8 +62,6 @@ public:
 
 	const Tile& getTile(const unsigned int& x, const unsigned int& y) const;
 	const std::vector<Tile>& getTiles() const;
-
-	void setUser(Camera& camera);
 
 	void setTileActive(Tile* active);
 	void setTileActive(const unsigned int& index);
@@ -86,15 +99,13 @@ private:
 	// void setTileActive(Tile* active);
 	void changeTileColor(Tile* active, const glm::vec3& color);
 
-	TileMapStructure m_TileMapInfo;
+	TileGridInfo m_TileMapInfo;
 
-	unsigned int m_Width = 0; // num of horizontal VERTICES (NOT Tiles)
-	unsigned int m_Depth = 0; // num of vertical VERTICES (NOT Tiles)
-	float m_MaxHeight = 0;
+	unsigned int m_Width; // num of horizontal VERTICES (NOT Tiles)
+	unsigned int m_Depth; // num of vertical VERTICES (NOT Tiles)
+	float m_MaxHeight;
 	glm::mat4 m_ScalingMat;
 	glm::vec3 m_ScalingVec;
-
-	UserPosition m_User;
 
 	std::vector<Tile> m_Tiles;
 	Tile* m_ActiveTile = nullptr;

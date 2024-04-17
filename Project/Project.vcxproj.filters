@@ -63,10 +63,13 @@
     <ClCompile Include="src\FPSManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\UserControls.cpp">
+    <ClCompile Include="src\UserInputRegistry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Controller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -134,13 +137,19 @@
     <ClInclude Include="headers\FPSManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\UserControls.h">
+    <ClInclude Include="headers\UserInputRegistry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="headers\ImageInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="headers\Window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\Controller.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\UserPositionSubscriber.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

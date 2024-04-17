@@ -4,8 +4,7 @@
 #include <glm/glm.hpp>
 
 #include "CommandHistory.h"
-#include "Camera.h"
-
+#include "Controller.h"
 
 struct MousePosition
 {
@@ -18,11 +17,11 @@ struct MousePosition
 	}
 };
 
-class UserControls
+class UserInputRegistry
 {
 public:
 
-	static void initUserControls(GLFWwindow* window, Camera* userCamera);
+	static void initUserControls(GLFWwindow* window, Controller* userCamera);
 
 	static void tick(const float& deltaTime);
 
@@ -52,7 +51,7 @@ private:
 	static bool __rotationEnabled;
 	static MousePosition __mousePos;
 
-	static Camera* __userCamera;
+	static Controller* __user;
 
 };
 

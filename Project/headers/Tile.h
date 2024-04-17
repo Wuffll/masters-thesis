@@ -8,12 +8,13 @@
 #include "VertexFormatLayout.h"
 
 #define NUM_OF_INDICES_PER_TILE 6 // each tile (rectangle) is made of two triangles (2 * 3)
+#define NUM_OF_NEIGHBORS 4
 
 #define DEFAULT_TILE_COLOR glm::vec3(0.75f, 0.0f, 0.1f)
 #define ACTIVE_TILE_COLOR glm::vec3(0.0f, 1.0f, 0.25f)
 #define TILE_VERTEX_FORMAT VertexFormat::ThreeVec3
 
-enum Neighbor
+enum Neighbor : unsigned char
 {
 	TOP = 0,
 	RIGHT = 1,
@@ -34,7 +35,11 @@ public:
 
 	const unsigned int* getIndicesPointer() const;
 
+	bool doesNeighborExists(const Neighbor& side) const;
+
 	const glm::vec3& getColor() const;
+
+	const Tile* getNeighbor(const Neighbor& side) const;
 
 	const Tile* getTopNeighbor() const;
 	const Tile* getRightNeighbor() const;
@@ -42,6 +47,8 @@ public:
 	const Tile* getLeftNeighbor() const;
 
 	void setColor(const glm::vec3& color);
+
+	void setNeighbor(const Neighbor& side, Tile* tile);
 
 	void setTopNeighbor(Tile* top);
 	void setRightNeighbor(Tile* right);
@@ -53,8 +60,7 @@ private:
 	glm::uvec2 m_Position;
 
 	glm::vec3 m_Color = DEFAULT_TILE_COLOR;
-	std::array<bool, 4> m_NeightborExists;
-	std::array<Tile*, 4> m_pNeighbors; // top, right, down, left
+	std::array<Tile*, NUM_OF_NEIGHBORS> m_pNeighbors; // top, right, down, left
 	unsigned int* m_pBufferIndices;
 
 };

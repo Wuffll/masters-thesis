@@ -6,17 +6,21 @@
 #include "Shader.h"
 
 #define VIEW_MATRIX_UNIFORM_NAME "uView"
+#define PROJ_MATRIX_UNIFORM_NAME "uProjection"
 
 class Camera
 {
 public:
 
 	Camera();
-	Camera(const glm::vec3& pos, const glm::vec3& direction, Shader* shader);
+	Camera(const glm::vec3& pos);
+	Camera(const glm::vec3& pos, const glm::vec3& direction, Shader* pShader);
 
 	const glm::vec3& getPosition() const;
 	const glm::vec3& getForwardVector() const;
 	const glm::vec3& getRightVector() const;
+
+	const bool& hasChanged() const;
 
 	const float& getSpeed() const;
 	const float& getSensitivity() const;
@@ -31,7 +35,8 @@ public:
 
 private:
 
-	void updateShaderData();
+	void updateShaderViewMatrix();
+	void updateShaderPerspectiveMatrix();
 
 	glm::mat4 m_ViewMatrix = { 1.0f };
 

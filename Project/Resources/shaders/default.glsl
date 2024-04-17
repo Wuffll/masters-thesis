@@ -17,7 +17,7 @@ void main()
 	float color = 0.85f * (aPosition.y / 255.0f);
 	gl_Position = uProjection * uView * uModel * vec4(aPosition, 1.0f);// uProjection * vec4(aPosition, 1.0f);
 	vColor = vec4(color, 0.0f, 0.2f, 1.0f);
-	vColor = vec4(aNormal, 1.0f);
+	vColor = vec4(abs(aNormal), 1.0f);
 }
 
 #shader FRAG
