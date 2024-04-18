@@ -2,10 +2,17 @@
 
 #include <GLFW/glfw3.h>
 #include <thread>
+#include <Windows.h>
 
 #include "Debug.h"
 
 double FPSManager::__applicationFPS = 0.0;
+
+FPSManager::FPSManager()
+    :
+    m_TargetFps(60.0f)
+{
+}
 
 FPSManager::FPSManager(float targetFps)
     :
@@ -20,17 +27,23 @@ void FPSManager::startFrame()
 
 void FPSManager::endFrame()
 {
-    float frameTime = m_Timer.stop();
-
-    float delta = (1.0f / m_TargetFps) - frameTime;
+    double frameTime = m_Timer.checkpoint();
     
-    if (delta >= 0.0001f)
+    double delta = (1.0 / m_TargetFps) - frameTime;
+    
+    // DOESN'T WORK
+    /*
+    if (delta >= 0.001f)
     {
-        unsigned int microseconds = delta * 1000000;
-        std::this_thread::sleep_for(std::chrono::microseconds(microseconds));
+        const unsigned int deltaInNanoseconds = (delta * 1000000000.0);
 
-        frameTime += delta;
+        std::this_thread::sleep_for(std::chrono::nanoseconds(deltaInNanoseconds));
     }
+    */
+
+    frameTime = m_Timer.stop();
+
+    Debug::printMessage(*this, STRING(frameTime), DebugSeverityLevel::OK);
 
     __applicationFPS = calculateFps(frameTime);
 }

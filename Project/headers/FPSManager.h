@@ -6,7 +6,7 @@ class FPSManager
 {
 public:
 
-	FPSManager() = default;
+	FPSManager();
 	FPSManager(float targetFps);
 
 	void startFrame();
@@ -25,7 +25,7 @@ private:
 	static double __applicationFPS;
 
 	Stopwatch m_Timer;
-	float m_TargetFps = 60.0f;
+	float m_TargetFps;
 
 };
 

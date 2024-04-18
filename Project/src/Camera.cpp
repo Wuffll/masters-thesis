@@ -98,7 +98,7 @@ void Camera::move(const glm::vec3& delta)
     m_Pos += m_Speed * delta.x * glm::cross(m_ForwardVec, m_UpVec); // m_RightVector; THIS IS CAUSING JITTER
     m_Pos += m_Speed * delta.y * m_ForwardVec;
 
-    Debug::printMessage(*this, "Position = " + GLM_TOSTRING(m_Pos), DebugSeverityLevel::OK);
+    // Debug::printMessage(*this, "Position = " + GLM_TOSTRING(m_Pos), DebugSeverityLevel::OK);
 
     m_HasChanged = true;
 }

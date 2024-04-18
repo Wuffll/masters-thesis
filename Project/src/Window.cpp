@@ -32,8 +32,6 @@ Window::Window(unsigned short width, unsigned short height, const std::string& n
 
     Debug::printMessage(*this, "OpenGL " + *glGetString(GL_VERSION), DebugSeverityLevel::OK);
 
-    // glfwSwapInterval(1);
-
     if (glewInit() != GLEW_OK)
         Debug::throwException(*this, "ERROR: GLEW unable to be initialized!");
 
@@ -91,4 +89,6 @@ void Window::enableFeatures(const GLFWwindow* window)
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glfwSwapInterval(1);
 }

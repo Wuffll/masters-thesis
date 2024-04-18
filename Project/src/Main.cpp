@@ -44,6 +44,8 @@ int main(void)
     defaultShader.setUniformMatrix4f("uModel", modelMat);
 
     float targetFps = 200.0f;
+
+    // not working
     FPSManager fpsManager(targetFps);
 
     float frameTime = 0.0f, elapsedTime = 0.0f, interval = 5.0f;
