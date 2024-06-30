@@ -6,22 +6,22 @@ namespace VertexFormat
 {
 	struct OneVec3
 	{
-		glm::vec3 first;
+		glm::vec3 first = { 0.0f, 0.0f, 0.0f };
 	};
 
 	struct TwoVec3
 	{
-		glm::vec3 first;
-		glm::vec3 second;
+		glm::vec3 first = { 0.0f, 0.0f, 0.0f };
+		glm::vec3 second = { 0.0f, 0.0f, 0.0f };
 	};
 	using PositionColor = TwoVec3;
 	using PositionNormal = TwoVec3;
 
 	struct ThreeVec3
 	{
-		glm::vec3 first;
-		glm::vec3 second;
-		glm::vec3 third;
+		glm::vec3 first = {0.0f, 0.0f, 0.0f};
+		glm::vec3 second = { 0.0f, 0.0f, 0.0f };
+		glm::vec3 third = { 0.0f, 0.0f, 0.0f };
 	};
 	using PositionNormalTexture = ThreeVec3;
 }
