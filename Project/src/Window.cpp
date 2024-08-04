@@ -2,6 +2,12 @@
 
 #include "Debug.h"
 
+static constexpr short DEFAULT_WIDTH = 1024;
+static constexpr short DEFAULT_HEIGHT = 768;
+
+static constexpr short MAX_WINDOW_WIDTH = 7680;
+static constexpr short MAX_WINDOW_HEIGHT = 4320;
+
 Window::Window()
     :
     Window(DEFAULT_WIDTH, DEFAULT_HEIGHT, m_Name)
@@ -14,6 +20,11 @@ Window::Window(unsigned short width, unsigned short height, const std::string& n
     m_Width(width),
     m_Height(height)
 {
+    if (!isObjectValid())
+    {
+        throw std::invalid_argument("Invalid arguments passed into Window object constructor!");
+    }
+
     /* Initialize the library */
     if (!glfwInit())
         exit(-1);
@@ -91,4 +102,17 @@ void Window::enableFeatures(const GLFWwindow* window)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glfwSwapInterval(1);
+}
+
+bool Window::isObjectValid()
+{
+    bool result = true;
+
+    if (m_Width > MAX_WINDOW_WIDTH
+        || m_Height > MAX_WINDOW_HEIGHT)
+    {
+        result = false;
+    }
+
+    return result;
 }

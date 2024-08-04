@@ -86,7 +86,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Controller.cpp" />
+    <ClCompile Include="src\CameraController.cpp" />
+    <ClCompile Include="src\UserInputController.cpp" />
+    <ClCompile Include="src\WindowController.cpp" />
     <ClCompile Include="src\FPSManager.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\IndexBufferGL.cpp" />
@@ -101,19 +103,21 @@
     <ClCompile Include="src\TileManager.cpp" />
     <ClCompile Include="src\Stopwatch.cpp" />
     <ClCompile Include="src\CommandHistory.cpp" />
-    <ClCompile Include="src\UserInputRegistry.cpp" />
     <ClCompile Include="src\Window.cpp" />
-    <ClInclude Include="headers\Controller.h" />
+    <ClInclude Include="headers\CameraController.h" />
     <ClInclude Include="headers\FPSManager.h" />
     <ClInclude Include="headers\Camera.h" />
     <ClInclude Include="headers\Debug.h" />
     <ClInclude Include="headers\Drawable.h" />
+    <ClInclude Include="headers\GLFWCallbacks.h" />
     <ClInclude Include="headers\ImageInfo.h" />
     <ClInclude Include="headers\ImageLoaderSTBI.h" />
     <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClInclude Include="headers\IndexBuffer.h" />
     <ClInclude Include="headers\IndexBufferGL.h" />
+    <ClInclude Include="headers\UserInputController.h" />
+    <ClInclude Include="headers\UserInputSubscriber.h" />
     <ClInclude Include="headers\UserPositionSubscriber.h" />
     <ClInclude Include="headers\VertexArray.h" />
     <ClInclude Include="headers\VertexBuffer.h" />
@@ -127,8 +131,9 @@
     <ClInclude Include="headers\VertexFormatLayout.h" />
     <ClInclude Include="headers\Stopwatch.h" />
     <ClInclude Include="headers\CommandHistory.h" />
-    <ClInclude Include="headers\UserInputRegistry.h" />
     <ClInclude Include="headers\Window.h" />
+    <ClInclude Include="headers\WindowController.h" />
+    <ClCompile Include="src\GLFWCallbacks.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\Image.h" />

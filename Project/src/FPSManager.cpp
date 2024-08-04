@@ -43,7 +43,7 @@ void FPSManager::endFrame()
 
     frameTime = m_Timer.stop();
 
-    Debug::printMessage(*this, STRING(frameTime), DebugSeverityLevel::OK);
+    // Debug::printMessage(*this, STRING(frameTime), DebugSeverityLevel::OK);
 
     __applicationFPS = calculateFps(frameTime);
 }

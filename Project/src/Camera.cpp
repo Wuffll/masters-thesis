@@ -95,8 +95,7 @@ void Camera::updateTranform()
 
 void Camera::move(const glm::vec3& delta)
 {
-    m_Pos += m_Speed * delta.x * glm::cross(m_ForwardVec, m_UpVec); // m_RightVector; THIS IS CAUSING JITTER
-    m_Pos += m_Speed * delta.y * m_ForwardVec;
+    m_Pos += m_Speed * delta;
 
     // Debug::printMessage(*this, "Position = " + GLM_TOSTRING(m_Pos), DebugSeverityLevel::OK);
 
@@ -108,8 +107,10 @@ void Camera::rotate(const glm::vec3& delta)
     float rotX = m_Sensitivity * delta.x;
     float rotY = m_Sensitivity * delta.y;
 
-    glm::vec3 newForwardVec = glm::rotate(m_ForwardVec, glm::radians(-rotX), glm::normalize(glm::cross(m_ForwardVec, m_UpVec)));
+    glm::vec3 newForwardVec = glm::rotate(m_ForwardVec, glm::radians(-rotY), m_RightVec);
 
+    // forward vector calculation
+    // clamp from -85deg to 85deg
     if (abs(glm::angle(newForwardVec, m_UpVec) - glm::radians(90.0f)) <= glm::radians(85.0f))
     {
         m_ForwardVec = newForwardVec;
@@ -118,8 +119,9 @@ void Camera::rotate(const glm::vec3& delta)
     {
         m_ForwardVec = m_ForwardVec;
     }
+    m_ForwardVec = glm::rotate(m_ForwardVec, glm::radians(-rotX), m_UpVec);
 
-    m_ForwardVec = glm::rotate(m_ForwardVec, glm::radians(-rotY), m_UpVec);
+    m_RightVec = glm::cross(m_ForwardVec, m_UpVec);
 
     m_HasChanged = true;
 }

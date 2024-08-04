@@ -6,9 +6,6 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#define DEFAULT_WIDTH 1024
-#define DEFAULT_HEIGHT 768
-
 class Window
 {
 public:
@@ -29,11 +26,13 @@ private:
 	void setClearColor(float r, float g, float b);
 	void enableFeatures(const GLFWwindow* window);
 
+	bool isObjectValid();
+
 	GLFWwindow* m_Window = nullptr;
 	std::string m_Name = "";
 
-	unsigned short m_Width = DEFAULT_WIDTH;
-	unsigned short m_Height = DEFAULT_HEIGHT;
+	unsigned short m_Width;
+	unsigned short m_Height;
 
 };
 
