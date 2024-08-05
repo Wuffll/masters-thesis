@@ -32,6 +32,8 @@ public:
 	void tick(float deltaTime);
 
 	void setCamera(Camera camera);
+	void setCameraMoveSpeed(float speed);
+	void setCameraRotationSensitivity(float sensitivity);
 
 	const Camera& getCamera() const;
 	Camera& getMutableCamera();

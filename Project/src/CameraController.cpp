@@ -6,6 +6,9 @@
 #include <GLFW/glfw3.h>
 #endif
 
+static constexpr float MIN_MOVE_SPEED = 5.0f;
+static constexpr float MIN_ROTATION_SENS = 15.0f;
+
 CameraController::CameraController()
 	:
 	m_Camera({}),
@@ -57,6 +60,22 @@ void CameraController::tick(float deltaTime)
 void CameraController::setCamera(Camera camera)
 {
 	m_Camera = std::move(camera);
+}
+
+void CameraController::setCameraMoveSpeed(float speed)
+{
+	if (speed < MIN_MOVE_SPEED)
+		return;
+
+	m_CameraMovementInfo.Speed = speed;
+}
+
+void CameraController::setCameraRotationSensitivity(float sensitivity)
+{
+	if (sensitivity < MIN_ROTATION_SENS)
+		return;
+
+	m_CameraMovementInfo.RotationSensitivity = sensitivity;
 }
 
 const Camera& CameraController::getCamera() const

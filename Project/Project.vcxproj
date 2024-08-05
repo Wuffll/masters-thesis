@@ -120,7 +120,6 @@
     <ClInclude Include="headers\TileV2.h" />
     <ClInclude Include="headers\UserInputController.h" />
     <ClInclude Include="headers\UserInputSubscriber.h" />
-    <ClInclude Include="headers\UserPositionSubscriber.h" />
     <ClInclude Include="headers\VertexArray.h" />
     <ClInclude Include="headers\VertexBuffer.h" />
     <ClInclude Include="headers\VertexBufferGL.h" />
