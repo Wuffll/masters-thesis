@@ -47,14 +47,6 @@ void TileManager::draw() const
 	glDrawElements(m_VAO.getDrawingMode(), m_pIBO->getIndicesCount(), GL_UNSIGNED_INT, 0);
 }
 
-void TileManager::userPositionUpdate(const glm::vec3& position)
-{
-	double xPos = floor(position.x) - m_TileMapInfo.columns / 2.0f; // Tiles are 1x1 so no need for mutliplication
-	double yPos = floor(position.z) - m_TileMapInfo.rows / 2.0f;
-
-	Debug::printMessage(*this, "Player position -> (" + STRING(xPos) + ", " + STRING(yPos) + ")", DebugSeverityLevel::OK);
-}
-
 void TileManager::setTileScaling(const glm::vec3& scale)
 {
 	m_ScalingVec = scale;

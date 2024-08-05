@@ -12,6 +12,17 @@ struct InputHistory
 	glm::vec2 PreviousMousePosition;
 };
 
+struct CameraMovementInfo
+{
+	glm::vec3 Direction = { 0.0f, 0.0f, 0.0f };
+
+	bool CanRotate = false;
+	glm::vec3 Rotation = { 0.0f, 0.0f, 0.0f };
+	
+	float Speed = 20.0f;
+	float RotationSensitivity = 30.0f;
+};
+
 class CameraController : public UserInputSubscriber
 {
 public:
@@ -30,12 +41,8 @@ public:
 private:
 
 	Camera m_Camera;
+	CameraMovementInfo m_CameraMovementInfo;
 
 	InputHistory m_InputHistory;
-
-	bool m_RotationActivated;
-	glm::vec3 m_Direction;
-	glm::vec3 m_Rotation;
-	float m_MoveSpeed;
 
 };

@@ -9,11 +9,13 @@ class UserInputSubscriber;
 
 struct KeyPressEvent
 {
-	int Key;
-	int State;
-	int Modifiers;
+	int Key = -1;
+	int State = -1;
+	int Modifiers = -1;
 
 	bool operator==(const KeyPressEvent& rhs) { return Key == rhs.Key && State == rhs.State && Modifiers == rhs.Modifiers; }
+
+	bool isValid() { return Key != -1 && State != -1 && Modifiers != -1; }
 };
 
 struct MousePosEvent
@@ -30,7 +32,7 @@ public:
 	const KeyPressEvent& getLatestKeyEvent() const;
 
 	const MousePosEvent& getLatestMousePosition() const;
-	const std::vector<MousePosEvent> getLastNMouseEvents(int n) const;
+	std::vector<MousePosEvent> getLastNMouseEvents(int n) const;
 
 	void updateKeyPressInput(const KeyPressEvent& keyEvent);
 

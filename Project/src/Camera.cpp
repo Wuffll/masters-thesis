@@ -57,16 +57,6 @@ const bool& Camera::hasChanged() const
     return m_HasChanged;
 }
 
-const float& Camera::getSpeed() const
-{
-    return m_Speed;
-}
-
-const float& Camera::getSensitivity() const
-{
-    return m_Sensitivity;
-}
-
 void Camera::setPosition(const glm::vec3& pos)
 {
     m_Pos = pos;
@@ -95,7 +85,7 @@ void Camera::updateTranform()
 
 void Camera::move(const glm::vec3& delta)
 {
-    m_Pos += m_Speed * delta;
+    m_Pos += delta;
 
     // Debug::printMessage(*this, "Position = " + GLM_TOSTRING(m_Pos), DebugSeverityLevel::OK);
 
@@ -104,8 +94,8 @@ void Camera::move(const glm::vec3& delta)
 
 void Camera::rotate(const glm::vec3& delta)
 {
-    float rotX = m_Sensitivity * delta.x;
-    float rotY = m_Sensitivity * delta.y;
+    float rotX = delta.x;
+    float rotY = delta.y;
 
     glm::vec3 newForwardVec = glm::rotate(m_ForwardVec, glm::radians(-rotY), m_RightVec);
 

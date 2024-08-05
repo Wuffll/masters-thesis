@@ -15,8 +15,9 @@
 #include "Camera.h"
 #include "FPSManager.h"
 
+#include "TileV2.h"
+
 #include "WindowController.h"
-#include "GLFWCallbacks.h"
 
 #include "Window.h"
 
@@ -25,29 +26,37 @@
 
 int main(void)
 {
-    std::string workingDirectory = std::filesystem::current_path().string();
-    printf("Program starting...\n");
-    printf("Working directory: %s\n", workingDirectory.c_str());
-
     WindowController windowController(WINDOW_WIDTH, WINDOW_HEIGHT);
     auto& window = windowController.getMutableWindow();
 
     glfwSetWindowUserPointer(window.getWindowPointer(), reinterpret_cast<void*>(&windowController));
+
+    std::string workingDirectory = std::filesystem::current_path().string();
+    printf("Program starting...\n");
+    printf("Working directory: %s\n", workingDirectory.c_str());
  
     Shader defaultShader(workingDirectory + "\\Resources\\shaders\\default.glsl"); // if you run from RenderDoc, remember to update the shaders in the shader file in the build folder
 
     Camera& camera = windowController.getMutableCameraController().getMutableCamera();
     camera.setShader(&defaultShader);
 
-    camera.rotate({ 0.0, 0.0f, 0.0f });
+    camera.move({ 0.0f, 20.0f, 0.0f });
+    camera.rotate({ 90.0f, 20.0f, 0.0f });
 
     // Image heightmap = Image(workingDirectory + "\\Resources\\heightmaps\\snowdon.png");
     // heightmap.convertToGrayscale();
 
     // TileManager manager(heightmap, 350.0f);
-    TileManager manager(4096, 4096, 200);
+    // TileManager manager(1024, 1024, 200);
 
     glm::mat4 modelMat(1.0f);
+
+    TileV2 tiles[16];
+
+    for (int i = 0; i < 16; i++)
+    {
+        tiles[i].changeStartOffset({ i * 33.0f, 0.0f, 0.0f });
+    }
 
     defaultShader.bind();
     defaultShader.setUniformMatrix4f("uModel", modelMat);
@@ -77,7 +86,11 @@ int main(void)
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        manager.draw();
+        // manager.draw();
+        for (int i = 0; i < 4; i++)
+        {
+            tiles[i].draw();
+        }
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window.getWindowPointer());

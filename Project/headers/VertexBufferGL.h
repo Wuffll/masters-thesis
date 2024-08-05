@@ -39,6 +39,6 @@ private:
 	unsigned int m_RendererID = 0;
 	unsigned int m_Usage;
 
-	unsigned int m_BufferCapacity = 0; // (filled memory + reserved memory); in bytes
-	unsigned int m_BufferSize = 0; // (filled memory); in bytes
+	unsigned long long m_BufferCapacity = 0; // (filled memory + reserved memory); in bytes
+	unsigned long long m_BufferSize = 0; // (filled memory); in bytes
 };

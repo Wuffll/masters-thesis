@@ -23,5 +23,12 @@ namespace VertexFormat
 		glm::vec3 second = { 0.0f, 0.0f, 0.0f };
 		glm::vec3 third = { 0.0f, 0.0f, 0.0f };
 	};
-	using PositionNormalTexture = ThreeVec3;
+
+	struct TwoVec3OneVec2
+	{
+		glm::vec3 first = { 0.0f, 0.0f, 0.0f };
+		glm::vec3 second = { 0.0f, 0.0f, 0.0f };
+		glm::vec2 third = { 0.0f, 0.0f };
+	};
+	using PositionColorTexCoord = TwoVec3OneVec2;
 }

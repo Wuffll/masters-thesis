@@ -78,6 +78,9 @@
     <ClCompile Include="src\GLFWCallbacks.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="headers\TileV2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\Image.h">
@@ -165,6 +168,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="headers\GLFWCallbacks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\TileV2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

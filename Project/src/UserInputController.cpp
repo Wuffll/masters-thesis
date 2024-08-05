@@ -2,7 +2,7 @@
 
 #include "UserInputSubscriber.h"
 
-constexpr size_t QUEUE_MAX_SIZE = 5;
+constexpr size_t QUEUE_MAX_SIZE = 8;
 
 UserInputController::UserInputController()
 	:
@@ -31,8 +31,11 @@ const MousePosEvent& UserInputController::getLatestMousePosition() const
 	return m_MouseEventQueue.front();
 }
 
-const std::vector<MousePosEvent> UserInputController::getLastNMouseEvents(int n) const
+std::vector<MousePosEvent> UserInputController::getLastNMouseEvents(int n) const
 {
+	if (n <= 0)
+		return {};
+
 	const size_t numMouseEvents = m_MouseEventQueue.size();
 
 	std::vector<MousePosEvent> output;

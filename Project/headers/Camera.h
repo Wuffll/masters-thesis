@@ -22,9 +22,6 @@ public:
 
 	const bool& hasChanged() const;
 
-	const float& getSpeed() const;
-	const float& getSensitivity() const;
-
 	void setPosition(const glm::vec3& pos);
 	void setShader(Shader* pShader);
 
@@ -44,9 +41,6 @@ private:
 	glm::vec3 m_ForwardVec = { 0.0f, 0.0f, -1.0f };
 	glm::vec3 m_UpVec = { 0.0f, 1.0f, 0.0f };
 	glm::vec3 m_RightVec = { 1.0f, 0.0f, 0.0f };
-
-	float m_Speed = 20.0f;
-	float m_Sensitivity = 30.0f;
 
 	Shader* m_pShader;
 	bool m_HasChanged = false;

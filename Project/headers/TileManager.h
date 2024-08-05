@@ -46,7 +46,7 @@ struct TileGridInfo
 	unsigned int rows = 0;
 };
 
-class TileManager : public Drawable, public UserPositionSubscriber
+class TileManager : public Drawable
 {
 public:
 
@@ -55,7 +55,6 @@ public:
 	TileManager(const Image& heightmap, const float& maxHeight);
 
 	void draw() const;
-	void userPositionUpdate(const glm::vec3& position);
 
 	void setTileScaling(const glm::vec3& scale);
 	const glm::vec3& getTileScaling() const;
