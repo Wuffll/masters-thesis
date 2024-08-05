@@ -4,7 +4,6 @@
 #include <glm/glm.hpp>
 
 #include "Drawable.h"
-#include "UserPositionSubscriber.h"
 
 #include "Camera.h"
 #include "Image.h"
