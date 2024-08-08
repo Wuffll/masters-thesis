@@ -26,6 +26,51 @@ TileV2::TileV2(TileInfo tileInfo)
 	init();
 }
 
+TileV2::TileV2(TileV2& other)
+	:
+	m_TileInfo(m_TileInfo),
+	m_Vertices(m_Vertices),
+	m_Indices(m_Indices)
+{
+	init();
+}
+
+TileV2& TileV2::operator=(const TileV2& other)
+{
+	m_TileInfo = other.m_TileInfo;
+	m_Vertices = other.m_Vertices;
+	m_Indices = other.m_Indices;
+
+	m_VertexBuffer.resetBuffer();
+	m_IndexBuffer.resetBuffer();
+	init();
+
+	return *this;
+}
+
+TileV2::TileV2(TileV2&& other)
+	:
+	m_TileInfo(std::move(other.m_TileInfo)),
+	m_Vertices(std::move(other.m_Vertices)),
+	m_Indices(std::move(other.m_Indices)),
+	m_VertexArray(std::move(other.m_VertexArray)),
+	m_VertexBuffer(std::move(other.m_VertexBuffer)),
+	m_IndexBuffer(std::move(other.m_IndexBuffer))
+{
+}
+
+TileV2& TileV2::operator=(TileV2&& other)
+{
+	m_TileInfo = std::move(other.m_TileInfo);
+	m_Vertices = std::move(other.m_Vertices);
+	m_Indices = std::move(other.m_Indices);
+	m_VertexArray = std::move(other.m_VertexArray);
+	m_VertexBuffer = std::move(other.m_VertexBuffer);
+	m_IndexBuffer = std::move(other.m_IndexBuffer);
+
+	return *this;
+}
+
 void TileV2::changeStartOffset(glm::vec3 offset)
 {
 	m_TileInfo.StartPosition = std::move(offset);
@@ -44,8 +89,12 @@ void TileV2::draw()
 
 void TileV2::init()
 {
-	generateVertices();
-	generateIndices();
+	if(m_Vertices.size() == 0)
+		generateVertices();
+
+	if(m_Indices.size() == 0)
+		generateIndices();
+	
 	fillBuffers();
 
 	return;

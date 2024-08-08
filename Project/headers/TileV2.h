@@ -28,6 +28,12 @@ public:
 	TileV2();
 	TileV2(TileInfo tileInfo);
 
+	TileV2(TileV2& other);
+	TileV2& operator=(const TileV2& other);
+
+	TileV2(TileV2&& other);
+	TileV2& operator=(TileV2&& other);
+
 	void changeStartOffset(glm::vec3 offset);
 
 	void draw();

@@ -10,9 +10,17 @@ public:
 	VertexBufferGL(const void* data, const unsigned int& size, unsigned int usage);
 	~VertexBufferGL();
 
+	VertexBufferGL(const VertexBufferGL&) = delete;
+	VertexBufferGL& operator=(VertexBufferGL&) = delete;
+
+	VertexBufferGL(VertexBufferGL&& other);
+	VertexBufferGL& operator=(VertexBufferGL&& other);
+
 	void fillBuffer(const void* data, const unsigned int& size, unsigned int usage);
 	void insertDataWithOffset(const void* data, const unsigned int& size, const unsigned int& offset);
 	unsigned int appendData(const void* data, const unsigned int& size);
+
+	void resetBuffer();
 
 	const bool& isInitialized() const;
 

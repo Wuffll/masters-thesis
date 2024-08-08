@@ -14,7 +14,34 @@ VertexArray::VertexArray()
 
 VertexArray::~VertexArray()
 {
+	if (m_RendererID = 0)
+		return;
+
 	glDeleteVertexArrays(1, &m_RendererID);
+}
+
+VertexArray::VertexArray(VertexArray&& other)
+	:
+	m_RendererID(std::move(other.m_RendererID)),
+	m_Layout(std::move(other.m_Layout)),
+	m_LayoutBuffersSeperated(std::move(other.m_LayoutBuffersSeperated)),
+	m_Usage(std::move(other.m_Usage)),
+	m_DrawingMode(std::move(other.m_DrawingMode))
+{
+	other.m_RendererID = 0;
+}
+
+VertexArray& VertexArray::operator=(VertexArray&& other)
+{
+	m_RendererID = std::move(other.m_RendererID);
+	m_Layout = std::move(other.m_Layout);
+	m_LayoutBuffersSeperated = std::move(other.m_LayoutBuffersSeperated);
+	m_Usage = std::move(other.m_Usage);
+	m_DrawingMode = std::move(other.m_DrawingMode);
+
+	other.m_RendererID = 0;
+
+	return *this;
 }
 
 const VertexBufferLayout& VertexArray::getLayout() const

@@ -37,9 +37,11 @@ int main(void)
  
     Shader defaultShader(workingDirectory + "\\Resources\\shaders\\default.glsl"); // if you run from RenderDoc, remember to update the shaders in the shader file in the build folder
 
-    Camera& camera = windowController.getMutableCameraController().getMutableCamera();
-    camera.setShader(&defaultShader);
+    auto& cameraController = windowController.getMutableCameraController();
+    cameraController.setCameraMoveSpeed(50.0f);
 
+    auto& camera = cameraController.getMutableCamera();
+    camera.setShader(&defaultShader);
     camera.move({ 0.0f, 20.0f, 0.0f });
     camera.rotate({ 90.0f, 20.0f, 0.0f });
 
@@ -51,11 +53,13 @@ int main(void)
 
     glm::mat4 modelMat(1.0f);
 
-    TileV2 tiles[16];
+    // make this work with stack initiated tiles; (modify copy/move constructors/asignment operators)
+    TileV2 tiles[4];
 
-    for (int i = 0; i < 16; i++)
+    for (int i = 0; i < 4; i++)
     {
-        tiles[i].changeStartOffset({ i * 33.0f, 0.0f, 0.0f });
+        // tiles[i].changeStartOffset({ 33.0f * i, 0.0f, 0.0f });
+        tiles[i] = TileV2({ {17.0f * i, 0.0f, 0.0f}, 16, 16 });
     }
 
     defaultShader.bind();

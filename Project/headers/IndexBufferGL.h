@@ -10,12 +10,20 @@ public:
 	IndexBufferGL(const void* data, const unsigned int& count, const unsigned int& usage);
 	~IndexBufferGL();
 
+	IndexBufferGL(IndexBuffer&) = delete;
+	IndexBufferGL& operator=(IndexBuffer&) = delete;
+
+	IndexBufferGL(IndexBufferGL&& other);
+	IndexBufferGL& operator=(IndexBufferGL&& other);
+
 	void fillBuffer(const void* data, const unsigned int& count, const unsigned int& usage);
 	void insertDataWithOffset(const void* data, const unsigned int& count, const unsigned int& offset);
 	unsigned int appendData(const void* data, const unsigned int& count);
 
 	void bind() const;
 	void unbind() const;
+
+	void resetBuffer();
 
 	const unsigned int& getIndicesCount() const;
 	const unsigned int& getBufferSize() const;

@@ -11,6 +11,12 @@ public:
 	VertexArray();
 	~VertexArray();
 
+	VertexArray(const VertexArray&) = delete;
+	VertexArray& operator=(VertexArray&) = delete;
+
+	VertexArray(VertexArray&&);
+	VertexArray& operator=(VertexArray&&);
+
 	const VertexBufferLayout& getLayout() const;
 	const unsigned int& getUsage() const;
 	const unsigned int& getDrawingMode() const;

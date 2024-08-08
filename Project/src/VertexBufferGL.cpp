@@ -33,8 +33,35 @@ VertexBufferGL::VertexBufferGL(const void* data, const unsigned int& size, unsig
 
 VertexBufferGL::~VertexBufferGL()
 {
+	if (m_RendererID == 0)
+		return;
+
 	Debug::printMessage(*this, "VertexBufferGL " + STRING(m_RendererID) + " destroyed!", DebugSeverityLevel::OK);
 	glDeleteBuffers(1, &m_RendererID);
+}
+
+VertexBufferGL::VertexBufferGL(VertexBufferGL&& other)
+	:
+	m_Initialized(std::move(other.m_Initialized)),
+	m_RendererID(std::move(other.m_RendererID)),
+	m_Usage(std::move(other.m_Usage)),
+	m_BufferCapacity(std::move(other.m_BufferCapacity)),
+	m_BufferSize(std::move(other.m_BufferSize))
+{
+	other.m_RendererID = 0;
+}
+
+VertexBufferGL& VertexBufferGL::operator=(VertexBufferGL&& other)
+{
+	m_Initialized = std::move(other.m_Initialized);
+	m_RendererID = std::move(other.m_RendererID);
+	m_Usage = std::move(other.m_Usage);
+	m_BufferCapacity = std::move(other.m_BufferCapacity);
+	m_BufferSize = std::move(other.m_BufferSize);
+
+	other.m_RendererID = 0;
+
+	return *this;
 }
 
 void VertexBufferGL::fillBuffer(const void* data, const unsigned int& size, unsigned int usage)
@@ -69,6 +96,14 @@ unsigned int VertexBufferGL::appendData(const void* data, const unsigned int& si
 	m_BufferSize += size;
 
 	return offset;
+}
+
+void VertexBufferGL::resetBuffer()
+{
+	glBufferData(GL_ARRAY_BUFFER, m_BufferSize, nullptr, m_Usage);
+
+	m_BufferSize = 0;
+	m_BufferCapacity = 0;
 }
 
 const bool& VertexBufferGL::isInitialized() const
