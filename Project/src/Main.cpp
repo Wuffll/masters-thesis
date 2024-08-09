@@ -16,6 +16,7 @@
 #include "FPSManager.h"
 
 #include "TileV2.h"
+#include "TileManagerV2.h"
 
 #include "WindowController.h"
 
@@ -53,7 +54,9 @@ int main(void)
 
     glm::mat4 modelMat(1.0f);
 
-    // make this work with stack initiated tiles; (modify copy/move constructors/asignment operators)
+    TileManagerV2 manager({0.0f, 0.0f, 0.0f}, {32, 32});
+
+    /*
     TileV2* tiles[9];
 
     int index = 0;
@@ -61,11 +64,12 @@ int main(void)
     {
         for (int x = 0; x < 3; x++)
         {
-            tiles[index] = new TileV2({{513.0f * x, 0.0f, 513.0f * z}, 512, 512});
+            tiles[index] = new TileV2({{129.0f * x, 0.0f, 129.0f * z}, 128, 128});
 
             index++;
         }
     }
+    */
 
     defaultShader.bind();
     defaultShader.setUniformMatrix4f("uModel", modelMat);
@@ -95,11 +99,14 @@ int main(void)
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // manager.draw();
+        manager.draw();
+
         for (int i = 0; i < 9; i++)
         {
-            tiles[i]->draw();
+            //tiles[i]->draw();
         }
+
+        
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window.getWindowPointer());

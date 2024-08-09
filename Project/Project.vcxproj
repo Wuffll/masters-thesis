@@ -86,6 +86,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\TileManagerV2.cpp" />
     <ClCompile Include="headers\TileV2.cpp" />
     <ClCompile Include="src\CameraController.cpp" />
     <ClCompile Include="src\UserInputController.cpp" />
@@ -117,6 +118,7 @@
     <ClCompile Include="src\Main.cpp" />
     <ClInclude Include="headers\IndexBuffer.h" />
     <ClInclude Include="headers\IndexBufferGL.h" />
+    <ClInclude Include="headers\TileManagerV2.h" />
     <ClInclude Include="headers\TileV2.h" />
     <ClInclude Include="headers\UserInputController.h" />
     <ClInclude Include="headers\UserInputSubscriber.h" />
