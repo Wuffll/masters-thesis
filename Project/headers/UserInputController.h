@@ -39,7 +39,7 @@ public:
 	void updateMousePos(glm::vec2 pos);
 
 	void notify() const;
-	void addSubscription(UserInputSubscriber* sub);
+	void addSubscriber(UserInputSubscriber* sub);
 
 private:
 

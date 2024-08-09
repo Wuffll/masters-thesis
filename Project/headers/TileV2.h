@@ -34,6 +34,8 @@ public:
 	TileV2(TileV2&& other);
 	TileV2& operator=(TileV2&& other);
 
+	const TileInfo& getTileInfo() const;
+
 	void changeStartOffset(glm::vec3 offset);
 
 	void setVisibility(bool isVisible);

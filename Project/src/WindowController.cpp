@@ -52,7 +52,7 @@ CameraController& WindowController::getMutableCameraController()
 
 void WindowController::init()
 {
-	m_UserInputController.addSubscription(&m_UserCameraController);
+	m_UserInputController.addSubscriber(&m_UserCameraController);
 	setupCallbackFunctions(m_Window.getWindowPointer());
 }
 

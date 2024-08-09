@@ -11,7 +11,6 @@
 #include "Shader.h"
 #include "Image.h"
 #include "Debug.h"
-#include "TileManager.h"
 #include "Camera.h"
 #include "FPSManager.h"
 
@@ -19,7 +18,6 @@
 #include "TileManagerV2.h"
 
 #include "WindowController.h"
-
 #include "Window.h"
 
 #define WINDOW_WIDTH 1280
@@ -46,30 +44,13 @@ int main(void)
     camera.move({ 0.0f, 20.0f, 0.0f });
     camera.rotate({ 90.0f, 20.0f, 0.0f });
 
-    // Image heightmap = Image(workingDirectory + "\\Resources\\heightmaps\\snowdon.png");
-    // heightmap.convertToGrayscale();
-
-    // TileManager manager(heightmap, 350.0f);
-    // TileManager manager(1024, 1024, 200);
-
     glm::mat4 modelMat(1.0f);
 
     TileManagerV2 manager({0.0f, 0.0f, 0.0f}, {32, 32});
 
-    /*
-    TileV2* tiles[9];
+    cameraController.addSubscriber(&manager);
 
-    int index = 0;
-    for (int z = 0; z < 3; z++)
-    {
-        for (int x = 0; x < 3; x++)
-        {
-            tiles[index] = new TileV2({{129.0f * x, 0.0f, 129.0f * z}, 128, 128});
-
-            index++;
-        }
-    }
-    */
+    cameraController.getMutableCamera().setPosition(manager.getCenter());
 
     defaultShader.bind();
     defaultShader.setUniformMatrix4f("uModel", modelMat);
@@ -100,13 +81,6 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         manager.draw();
-
-        for (int i = 0; i < 9; i++)
-        {
-            //tiles[i]->draw();
-        }
-
-        
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window.getWindowPointer());

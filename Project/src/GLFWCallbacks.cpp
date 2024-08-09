@@ -15,8 +15,15 @@ void keyboardKeyCallback(GLFWwindow* window, int key, int scancode, int action, 
 
 	printf("Pressing key: %d %d %d\n", key, action, mods);
 
-	UserInputController& controller = pWindowController->getMutableInputController();
-	controller.updateKeyPressInput({ key, action, mods });
+	if (key == GLFW_KEY_ESCAPE)
+	{
+		glfwSetWindowShouldClose(window, true);
+	}
+	else
+	{
+		UserInputController& controller = pWindowController->getMutableInputController();
+		controller.updateKeyPressInput({ key, action, mods });
+	}
 }
 
 void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
@@ -30,6 +37,7 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 	}
 
 	printf("Pressing button: %d %d\n", button, action);
+
 
 	UserInputController& controller = pWindowController->getMutableInputController();
 	controller.updateKeyPressInput({ button, action, mods });

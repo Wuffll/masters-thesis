@@ -77,6 +77,11 @@ TileV2& TileV2::operator=(TileV2&& other)
 	return *this;
 }
 
+const TileInfo& TileV2::getTileInfo() const
+{
+	return m_TileInfo;
+}
+
 void TileV2::changeStartOffset(glm::vec3 offset)
 {
 	m_TileInfo.StartPosition = std::move(offset);

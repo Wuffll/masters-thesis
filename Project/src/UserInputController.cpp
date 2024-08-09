@@ -85,7 +85,7 @@ void UserInputController::notify() const
 	}
 }
 
-void UserInputController::addSubscription(UserInputSubscriber* sub)
+void UserInputController::addSubscriber(UserInputSubscriber* sub)
 {
 	m_Subscribers.push_back(sub);
 }

@@ -36,6 +36,8 @@ void CameraController::tick(float deltaTime)
 
 			m_Camera.move(direction.y * forward * speed * deltaTime);
 		}
+
+		positionNotify();
 	}
 
 	if (m_CameraMovementInfo.CanRotate)
@@ -86,6 +88,19 @@ const Camera& CameraController::getCamera() const
 Camera& CameraController::getMutableCamera()
 {
 	return m_Camera;
+}
+
+void CameraController::addSubscriber(CameraSubscriber* newSub)
+{
+	m_Subscribers.push_back(newSub);
+}
+
+void CameraController::positionNotify()
+{
+	for (auto& sub : m_Subscribers)
+	{
+		sub->cameraPositionUpdate(m_Camera.getPosition());
+	}
 }
 
 void CameraController::userInputUpdate(const UserInputController& inputController)

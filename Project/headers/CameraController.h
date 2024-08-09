@@ -1,10 +1,13 @@
 #pragma once
 
+#include <vector>
+
 #include <glm/glm.hpp>
 
 #include "Camera.h"
 #include "UserInputSubscriber.h"
 #include "UserInputController.h"
+#include "CameraSubscriber.h"
 
 struct InputHistory
 {
@@ -38,6 +41,9 @@ public:
 	const Camera& getCamera() const;
 	Camera& getMutableCamera();
 
+	void addSubscriber(CameraSubscriber* newSub);
+	void positionNotify();
+
 	void userInputUpdate(const UserInputController& inputController);
 
 private:
@@ -46,5 +52,7 @@ private:
 	CameraMovementInfo m_CameraMovementInfo;
 
 	InputHistory m_InputHistory;
+
+	std::vector<CameraSubscriber*> m_Subscribers;
 
 };

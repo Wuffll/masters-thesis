@@ -107,6 +107,7 @@
     <ClCompile Include="src\CommandHistory.cpp" />
     <ClCompile Include="src\Window.cpp" />
     <ClInclude Include="headers\CameraController.h" />
+    <ClInclude Include="headers\CameraSubscriber.h" />
     <ClInclude Include="headers\FPSManager.h" />
     <ClInclude Include="headers\Camera.h" />
     <ClInclude Include="headers\Debug.h" />

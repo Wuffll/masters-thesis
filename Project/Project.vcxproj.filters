@@ -176,6 +176,9 @@
     <ClInclude Include="headers\TileManagerV2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="headers\CameraSubscriber.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\default.glsl" />
