@@ -25,9 +25,9 @@ public:
 
 	void resetBuffer();
 
-	const unsigned int& getIndicesCount() const;
-	const unsigned int& getBufferSize() const;
-	const unsigned int& getOffset() const;
+	unsigned int getIndicesCount() const;
+	unsigned int getBufferSize() const;
+	unsigned int getOffset() const;
 
 
 private:

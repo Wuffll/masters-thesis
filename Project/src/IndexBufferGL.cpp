@@ -43,24 +43,26 @@ IndexBufferGL::~IndexBufferGL()
 
 IndexBufferGL::IndexBufferGL(IndexBufferGL&& other)
 	:
-	m_RendererID(std::move(other.m_RendererID)),
 	m_Usage(std::move(other.m_Usage)),
 	m_Count(std::move(other.m_Count)),
 	m_BufferCapacity(std::move(other.m_BufferCapacity)),
 	m_BufferSize(std::move(other.m_BufferSize))
 {
-	other.m_RendererID = 0;
+	unsigned int oldRendererID = m_RendererID;
+	m_RendererID = std::move(other.m_RendererID);
+	other.m_RendererID = oldRendererID;
 }
 
 IndexBufferGL& IndexBufferGL::operator=(IndexBufferGL&& other)
 {
-	m_RendererID = std::move(other.m_RendererID);
 	m_Usage = std::move(other.m_Usage);
 	m_Count = std::move(other.m_Count);
 	m_BufferCapacity = std::move(other.m_BufferCapacity);
 	m_BufferSize = std::move(other.m_BufferSize);
 
-	other.m_RendererID = 0;
+	unsigned int oldRendererID = m_RendererID;
+	m_RendererID = std::move(other.m_RendererID);
+	other.m_RendererID = oldRendererID;
 
 	return *this;
 }
@@ -167,12 +169,12 @@ void IndexBufferGL::resetBuffer()
 	m_BufferCapacity = 0;
 }
 
-const unsigned int& IndexBufferGL::getIndicesCount() const
+unsigned int IndexBufferGL::getIndicesCount() const
 {
 	return m_Count;
 }
 
-const unsigned int& IndexBufferGL::getBufferSize() const
+unsigned int IndexBufferGL::getBufferSize() const
 {
 	return m_BufferSize;
 }
@@ -182,7 +184,7 @@ const unsigned int& IndexBufferGL::getBufferSize() const
 /// </summary>
 /// <returns>Returns offset (in bytes) at which the free memory starts</returns>
 /// 
-const unsigned int& IndexBufferGL::getOffset() const
+unsigned int IndexBufferGL::getOffset() const
 {
 	return m_BufferSize;
 }

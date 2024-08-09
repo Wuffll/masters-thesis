@@ -43,23 +43,26 @@ VertexBufferGL::~VertexBufferGL()
 VertexBufferGL::VertexBufferGL(VertexBufferGL&& other)
 	:
 	m_Initialized(std::move(other.m_Initialized)),
-	m_RendererID(std::move(other.m_RendererID)),
 	m_Usage(std::move(other.m_Usage)),
 	m_BufferCapacity(std::move(other.m_BufferCapacity)),
 	m_BufferSize(std::move(other.m_BufferSize))
 {
-	other.m_RendererID = 0;
+	unsigned int oldRendererID = m_RendererID;
+	m_RendererID = std::move(other.m_RendererID);
+	other.m_RendererID = oldRendererID;
 }
 
 VertexBufferGL& VertexBufferGL::operator=(VertexBufferGL&& other)
 {
 	m_Initialized = std::move(other.m_Initialized);
-	m_RendererID = std::move(other.m_RendererID);
 	m_Usage = std::move(other.m_Usage);
 	m_BufferCapacity = std::move(other.m_BufferCapacity);
 	m_BufferSize = std::move(other.m_BufferSize);
 
-	other.m_RendererID = 0;
+
+	unsigned int oldRendererID = m_RendererID;
+	m_RendererID = std::move(other.m_RendererID);
+	other.m_RendererID = oldRendererID;
 
 	return *this;
 }
@@ -106,27 +109,27 @@ void VertexBufferGL::resetBuffer()
 	m_BufferCapacity = 0;
 }
 
-const bool& VertexBufferGL::isInitialized() const
+bool VertexBufferGL::isInitialized() const
 {
 	return m_Initialized;
 }
 
-const unsigned int& VertexBufferGL::getRendererID() const
+unsigned int VertexBufferGL::getRendererID() const
 {
 	return m_RendererID;
 }
 
-const unsigned int& VertexBufferGL::getBufferCapacity() const
+unsigned int VertexBufferGL::getBufferCapacity() const
 {
 	return m_BufferCapacity;
 }
 
-const unsigned int& VertexBufferGL::getBufferSize() const
+unsigned int VertexBufferGL::getBufferSize() const
 {
 	return m_BufferSize;
 }
 
-const unsigned int& VertexBufferGL::getOffset() const
+unsigned int VertexBufferGL::getOffset() const
 {
 	return m_BufferSize;
 }

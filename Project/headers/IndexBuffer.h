@@ -11,9 +11,9 @@ public:
 	virtual void bind() const = 0;
 	virtual void unbind() const = 0;
 
-	virtual const unsigned int& getIndicesCount() const = 0;
-	virtual const unsigned int& getBufferSize() const = 0;
-	virtual const unsigned int& getOffset() const = 0;
+	virtual unsigned int getIndicesCount() const = 0;
+	virtual unsigned int getBufferSize() const = 0;
+	virtual unsigned int getOffset() const = 0;
 
 
 private:

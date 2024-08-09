@@ -38,7 +38,7 @@ int main(void)
     Shader defaultShader(workingDirectory + "\\Resources\\shaders\\default.glsl"); // if you run from RenderDoc, remember to update the shaders in the shader file in the build folder
 
     auto& cameraController = windowController.getMutableCameraController();
-    cameraController.setCameraMoveSpeed(50.0f);
+    cameraController.setCameraMoveSpeed(128.0f);
 
     auto& camera = cameraController.getMutableCamera();
     camera.setShader(&defaultShader);
@@ -54,12 +54,17 @@ int main(void)
     glm::mat4 modelMat(1.0f);
 
     // make this work with stack initiated tiles; (modify copy/move constructors/asignment operators)
-    TileV2 tiles[4];
+    TileV2* tiles[9];
 
-    for (int i = 0; i < 4; i++)
+    int index = 0;
+    for (int z = 0; z < 3; z++)
     {
-        // tiles[i].changeStartOffset({ 33.0f * i, 0.0f, 0.0f });
-        tiles[i] = TileV2({ {17.0f * i, 0.0f, 0.0f}, 16, 16 });
+        for (int x = 0; x < 3; x++)
+        {
+            tiles[index] = new TileV2({{513.0f * x, 0.0f, 513.0f * z}, 512, 512});
+
+            index++;
+        }
     }
 
     defaultShader.bind();
@@ -83,7 +88,7 @@ int main(void)
 
         if (interval <= 0.0f)
         {
-            Debug::printMessage(fpsManager, ">>>>>>>>>>>FPS = " + STRING(fpsManager.getFps()), DebugSeverityLevel::OK);
+            Debug::printMessage(fpsManager, ">>>>>>>>>>> FPS = " + STRING(fpsManager.getFps()), DebugSeverityLevel::OK);
             interval = 5.0f;
         }
 
@@ -91,9 +96,9 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // manager.draw();
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 9; i++)
         {
-            tiles[i].draw();
+            tiles[i]->draw();
         }
 
         /* Swap front and back buffers */

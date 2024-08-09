@@ -10,12 +10,12 @@ public:
 	virtual void insertDataWithOffset(const void* data, const unsigned int& size, const unsigned int& offset) = 0;
 	virtual unsigned int appendData(const void* data, const unsigned int& size) = 0;
 
-	virtual const bool& isInitialized() const = 0;
+	virtual bool isInitialized() const = 0;
 
-	virtual const unsigned int& getRendererID() const = 0;
-	virtual const unsigned int& getBufferCapacity() const = 0;
-	virtual const unsigned int& getBufferSize() const = 0;
-	virtual const unsigned int& getOffset() const = 0;
+	virtual unsigned int getRendererID() const = 0;
+	virtual unsigned int getBufferCapacity() const = 0;
+	virtual unsigned int getBufferSize() const = 0;
+	virtual unsigned int getOffset() const = 0;
 
 	virtual void bind() const = 0;
 	virtual void bind(const unsigned int& bindingIndex, const VertexBufferLayout& layout) const = 0;

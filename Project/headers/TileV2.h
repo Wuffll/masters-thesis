@@ -36,6 +36,9 @@ public:
 
 	void changeStartOffset(glm::vec3 offset);
 
+	void setVisibility(bool isVisible);
+	bool getVisibility() const;
+
 	void draw();
 
 private:
@@ -47,6 +50,8 @@ private:
 	void fillBuffers();
 
 	TileInfo m_TileInfo;
+
+	bool m_IsVisible;
 
 	std::vector<VERTEX_FORMAT> m_Vertices;
 	std::vector<unsigned int> m_Indices;

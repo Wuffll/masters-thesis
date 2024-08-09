@@ -11,6 +11,7 @@ constexpr int NUM_OF_INDICES_PER_SQUARE = 6;
 TileV2::TileV2()
 	:
 	m_TileInfo({ DEFAULT_TILE_POS, DEFAULT_TILE_WIDTH, DEFAULT_TILE_DEPTH }),
+	m_IsVisible(true),
 	m_Vertices({}),
 	m_Indices({})
 {
@@ -20,6 +21,7 @@ TileV2::TileV2()
 TileV2::TileV2(TileInfo tileInfo)
 	:
 	m_TileInfo(tileInfo),
+	m_IsVisible(true),
 	m_Vertices({}),
 	m_Indices({})
 {
@@ -29,6 +31,7 @@ TileV2::TileV2(TileInfo tileInfo)
 TileV2::TileV2(TileV2& other)
 	:
 	m_TileInfo(m_TileInfo),
+	m_IsVisible(other.m_IsVisible),
 	m_Vertices(m_Vertices),
 	m_Indices(m_Indices)
 {
@@ -38,6 +41,7 @@ TileV2::TileV2(TileV2& other)
 TileV2& TileV2::operator=(const TileV2& other)
 {
 	m_TileInfo = other.m_TileInfo;
+	m_IsVisible = other.m_IsVisible;
 	m_Vertices = other.m_Vertices;
 	m_Indices = other.m_Indices;
 
@@ -51,6 +55,7 @@ TileV2& TileV2::operator=(const TileV2& other)
 TileV2::TileV2(TileV2&& other)
 	:
 	m_TileInfo(std::move(other.m_TileInfo)),
+	m_IsVisible(std::move(other.m_IsVisible)),
 	m_Vertices(std::move(other.m_Vertices)),
 	m_Indices(std::move(other.m_Indices)),
 	m_VertexArray(std::move(other.m_VertexArray)),
@@ -62,6 +67,7 @@ TileV2::TileV2(TileV2&& other)
 TileV2& TileV2::operator=(TileV2&& other)
 {
 	m_TileInfo = std::move(other.m_TileInfo);
+	m_IsVisible = std::move(other.m_IsVisible);
 	m_Vertices = std::move(other.m_Vertices);
 	m_Indices = std::move(other.m_Indices);
 	m_VertexArray = std::move(other.m_VertexArray);
@@ -79,8 +85,21 @@ void TileV2::changeStartOffset(glm::vec3 offset)
 	fillBuffers();
 }
 
+void TileV2::setVisibility(bool isVisible)
+{
+	m_IsVisible = isVisible;
+}
+
+bool TileV2::getVisibility() const
+{
+	return m_IsVisible;
+}
+
 void TileV2::draw()
 {
+	if (!m_IsVisible)
+		return;
+
 	m_VertexArray.bind();
 	m_VertexBuffer.bind();
 	m_IndexBuffer.bind();

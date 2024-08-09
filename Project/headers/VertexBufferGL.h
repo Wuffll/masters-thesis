@@ -22,12 +22,12 @@ public:
 
 	void resetBuffer();
 
-	const bool& isInitialized() const;
+	bool isInitialized() const;
 
-	const unsigned int& getRendererID() const;
-	const unsigned int& getBufferCapacity() const;
-	const unsigned int& getBufferSize() const;
-	const unsigned int& getOffset() const;
+	unsigned int getRendererID() const;
+	unsigned int getBufferCapacity() const;
+	unsigned int getBufferSize() const;
+	unsigned int getOffset() const;
 
 	void bind() const;
 	void bind(const unsigned int& bindingIndex, const VertexBufferLayout& layout) const;
@@ -43,6 +43,8 @@ private:
 
 	static unsigned int __boundVBO;
 
+
+	bool m_IsVisible = true;
 	bool m_Initialized = false;
 	unsigned int m_RendererID = 0;
 	unsigned int m_Usage;
