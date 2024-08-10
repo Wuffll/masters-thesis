@@ -64,6 +64,13 @@ void CameraController::setCamera(Camera camera)
 	m_Camera = std::move(camera);
 }
 
+void CameraController::setCameraPosition(glm::vec3 newPosition)
+{
+	m_Camera.setPosition(newPosition);
+
+	positionNotify();
+}
+
 void CameraController::setCameraMoveSpeed(float speed)
 {
 	if (speed < MIN_MOVE_SPEED)
@@ -93,6 +100,8 @@ Camera& CameraController::getMutableCamera()
 void CameraController::addSubscriber(CameraSubscriber* newSub)
 {
 	m_Subscribers.push_back(newSub);
+
+	newSub->cameraPositionUpdate(m_Camera.getPosition());
 }
 
 void CameraController::positionNotify()
@@ -105,7 +114,7 @@ void CameraController::positionNotify()
 
 void CameraController::userInputUpdate(const UserInputController& inputController)
 {
-	printf("Processing user input in CameraController\n");
+	// printf("Processing user input in CameraController\n");
 
 	// key/button press processing
 	const auto& keyEvent = inputController.getLatestKeyEvent();

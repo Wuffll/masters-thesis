@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <memory>
+#include <optional>
 
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
@@ -11,6 +12,11 @@
 class UserInputController;
 
 class TileV2;
+
+struct UserInfo
+{
+	std::optional<glm::ivec2> TilePos; // on which tile is the user
+};
 
 class TileManagerV2 : public CameraSubscriber
 {
@@ -28,7 +34,11 @@ public:
 
 private:
 
+	void playerOnNewTile(UserInfo before, UserInfo after);
+	void generateTiles(glm::ivec2 difference);
+
 	glm::vec3 m_startPosition; // bottom left of whole tile set
+	UserInfo m_UserInfo;
 
 	std::vector<std::unique_ptr<TileV2>> m_Tiles;
 

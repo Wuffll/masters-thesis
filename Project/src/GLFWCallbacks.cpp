@@ -13,7 +13,7 @@ void keyboardKeyCallback(GLFWwindow* window, int key, int scancode, int action, 
 		throw std::exception("UserInputController not initialized at the start of program/main function!");
 	}
 
-	printf("Pressing key: %d %d %d\n", key, action, mods);
+	// printf("Pressing key: %d %d %d\n", key, action, mods);
 
 	if (key == GLFW_KEY_ESCAPE)
 	{
@@ -36,8 +36,7 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 		throw std::exception("UserInputController not initialized at the start of program/main function!");
 	}
 
-	printf("Pressing button: %d %d\n", button, action);
-
+	// printf("Pressing button: %d %d\n", button, action);
 
 	UserInputController& controller = pWindowController->getMutableInputController();
 	controller.updateKeyPressInput({ button, action, mods });
@@ -53,7 +52,7 @@ void mousePositionCallback(GLFWwindow* window, double xpos, double ypos)
 		throw std::exception("UserInputController not initialized at the start of program/main function!");
 	}
 
-	printf("Mouse pos: %lf %lf\n", xpos, ypos);
+	// printf("Mouse pos: %lf %lf\n", xpos, ypos);
 
 	UserInputController& controller = pWindowController->getMutableInputController();
 	controller.updateMousePos({ xpos, ypos });

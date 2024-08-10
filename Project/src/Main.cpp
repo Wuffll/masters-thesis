@@ -49,8 +49,7 @@ int main(void)
     TileManagerV2 manager({0.0f, 0.0f, 0.0f}, {32, 32});
 
     cameraController.addSubscriber(&manager);
-
-    cameraController.getMutableCamera().setPosition(manager.getCenter());
+    cameraController.setCameraPosition(manager.getCenter());
 
     defaultShader.bind();
     defaultShader.setUniformMatrix4f("uModel", modelMat);

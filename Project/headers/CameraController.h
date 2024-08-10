@@ -35,6 +35,7 @@ public:
 	void tick(float deltaTime);
 
 	void setCamera(Camera camera);
+	void setCameraPosition(glm::vec3 newPosition);
 	void setCameraMoveSpeed(float speed);
 	void setCameraRotationSensitivity(float sensitivity);
 

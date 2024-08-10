@@ -96,5 +96,35 @@ glm::vec3 TileManagerV2::getCenter() const
 
 void TileManagerV2::cameraPositionUpdate(glm::vec3 newPos)
 {
-	printf("TileManagerV2 -> New Camera Pos: %f %f %f\n", newPos.x, newPos.y, newPos.z);
+	auto startUserInfo = m_UserInfo;
+
+	auto currPos = m_UserInfo.TilePos.value_or<glm::ivec2>({0, 0});
+	auto tileSize = m_Tiles[0].get()->getTileInfo().Rows;
+
+	if (newPos.x >= (currPos.x) * tileSize && newPos.x <= (currPos.x + 1) * tileSize &&
+		newPos.z >= (currPos.y) * tileSize && newPos.z <= (currPos.y + 1) * tileSize)
+	{
+		return;
+	}
+
+	m_UserInfo.TilePos = { floor(newPos.x / tileSize), floor(newPos.z / tileSize) };
+
+	if(startUserInfo.TilePos.has_value())
+		playerOnNewTile(startUserInfo, m_UserInfo);
+
+	printf("User position: %d %d\n", m_UserInfo.TilePos.value().x
+								   , m_UserInfo.TilePos.value().y);
+}
+
+void TileManagerV2::playerOnNewTile(UserInfo before, UserInfo after)
+{
+	auto difference = after.TilePos.value() - before.TilePos.value();
+	printf("Delta (X, Y) = (%d, %d)\n", difference.x, difference.y);
+
+	generateTiles(difference);
+}
+
+void TileManagerV2::generateTiles(glm::ivec2 difference)
+{
+	printf("Starting algorithm for allocating new tiles and moving current ones\n");
 }
