@@ -8,6 +8,8 @@ static constexpr glm::vec3 DEFAULT_START_POS = { 0.0f, 0.0f, 0.0f };
 static constexpr glm::ivec2 DEFAULT_TILE_SIZE = { 128, 128 };
 static constexpr float CENTER_Y_OFFSET = 10.0f;
 
+static constexpr float OFFSET_BETWEEN_TILES = 1.0f;
+
 TileManagerV2::TileManagerV2()
 	:
 	m_startPosition(DEFAULT_START_POS)
@@ -22,11 +24,9 @@ TileManagerV2::TileManagerV2()
 		for (int x = 0; x < 5; x++)
 		{
 			auto tile = std::make_unique<TileV2>(TileInfo(
-				glm::vec3(startPos.x + (tileSize.x + 1) * x, startPos.y, startPos.z + (tileSize.y + 1) * z),
+				glm::vec3(startPos.x + (tileSize.x) * x, startPos.y, startPos.z + (tileSize.y) * z),
 				tileSize.x,
 				tileSize.y));
-
-			m_Tiles.push_back(std::move(tile));
 		}
 	}
 }
@@ -44,7 +44,7 @@ TileManagerV2::TileManagerV2(glm::vec3 startPos)
 		for (int x = 0; x < 5; x++)
 		{
 			auto tile = std::make_unique<TileV2>(TileInfo(
-				glm::vec3(startPos.x + (tileSize.x + 1) * x, startPos.y, startPos.z + (tileSize.y + 1) * z),
+				glm::vec3(startPos.x + (tileSize.x) * x, startPos.y, startPos.z + (tileSize.y) * z),
 				tileSize.x,
 				tileSize.y));
 
@@ -64,7 +64,7 @@ TileManagerV2::TileManagerV2(glm::vec3 startPos, glm::ivec2 tileSize)
 		for (int x = 0; x < 5; x++)
 		{
 			auto tile = std::make_unique<TileV2>(TileInfo(
-				glm::vec3(startPos.x + (tileSize.x + 1) * x, startPos.y, startPos.z + (tileSize.y + 1) * z),
+				glm::vec3(startPos.x + (tileSize.x) * x, startPos.y, startPos.z + (tileSize.y) * z),
 				tileSize.x,
 				tileSize.y));
 
@@ -77,7 +77,17 @@ void TileManagerV2::draw()
 {
 	for (auto& tile : m_Tiles)
 	{
-		tile->draw();
+		if (tile)
+		{
+			if (!(tile->getVisibility()))
+				throw new std::exception("Tile not visible!");
+
+			tile->draw();
+		}
+		else
+		{
+			throw new std::exception("Invalid Tile Object!");
+		}
 	}
 }
 
@@ -127,4 +137,99 @@ void TileManagerV2::playerOnNewTile(UserInfo before, UserInfo after)
 void TileManagerV2::generateTiles(glm::ivec2 difference)
 {
 	printf("Starting algorithm for allocating new tiles and moving current ones\n");
+
+	if (difference.y != 0)
+	{
+		// OpenGL camera looks towards Z-, so going forward is actually going towards z- (or y- in this case)
+		// X axis should be normal though (x+ on the right, x- on the left)
+
+		if (difference.y < 0) // Forward movement
+		{
+			for (int z = 3; z >= 0; z--)
+			{
+				for (int x = 0; x < 5; x++)
+				{
+					m_Tiles[(z + 1) * 5 + x] = std::move(m_Tiles[z * 5 + x]);
+				}
+
+				if (z == 0)
+				{
+					auto tileSize = m_Tiles[(z + 1) * 5].get()->getTileInfo().Rows;
+
+					for (int x = 0; x < 5; x++)
+					{
+						auto previousRowOffset = m_Tiles[(z + 1) * 5 + x].get()->getTileInfo().StartPosition;
+						m_Tiles[z * 5 + x] = std::make_unique<TileV2>(TileInfo(previousRowOffset + glm::vec3(0.0f, 0.0f, -tileSize), tileSize, tileSize));
+					}
+				}
+			}
+		}
+		else // Backward movement
+		{
+			for (int z = 1; z < 5; z++)
+			{
+				for (int x = 0; x < 5; x++)
+				{
+					m_Tiles[(z - 1) * 5 + x] = std::move(m_Tiles[z * 5 + x]);
+				}
+
+				if (z == 4)
+				{
+					auto tileSize = m_Tiles[0].get()->getTileInfo().Rows;
+
+					for (int x = 0; x < 5; x++)
+					{
+						auto previousRowOffset = m_Tiles[(z - 1) * 5 + x].get()->getTileInfo().StartPosition;
+						m_Tiles[z * 5 + x] = std::make_unique<TileV2>(TileInfo(previousRowOffset + glm::vec3(0.0f, 0.0f, tileSize), tileSize, tileSize));
+					}
+				}
+			}
+		}
+	}
+
+	if (difference.x != 0)
+	{
+		if (difference.x < 0) // Left movement
+		{
+			for (int x = 3; x >= 0; x--)
+			{
+				for (int z = 0; z < 5; z++)
+				{
+					m_Tiles[z * 5 + (x + 1)] = std::move(m_Tiles[z * 5 + x]);
+				}
+
+				if (x == 0)
+				{
+					auto tileSize = m_Tiles[1].get()->getTileInfo().Rows;
+
+					for (int z = 0; z < 5; z++)
+					{
+						auto previousRowOffset = m_Tiles[z * 5 + (x + 1)].get()->getTileInfo().StartPosition;
+						m_Tiles[z * 5 + x] = std::make_unique<TileV2>(TileInfo(previousRowOffset + glm::vec3(-tileSize, 0.0f, 0.0f), tileSize, tileSize));
+					}
+				}
+			}
+		}
+		else // Right movement
+		{
+			for (int x = 1; x < 5; x++)
+			{
+				for (int z = 0; z < 5; z++)
+				{
+					m_Tiles[z * 5 + (x - 1)] = std::move(m_Tiles[z * 5 + x]);
+				}
+
+				if (x == 4)
+				{
+					auto tileSize = m_Tiles[0].get()->getTileInfo().Rows;
+
+					for (int z = 0; z < 5; z++)
+					{
+						auto previousRowOffset = m_Tiles[z * 5 + (x - 1)].get()->getTileInfo().StartPosition;
+						m_Tiles[z * 5 + x] = std::make_unique<TileV2>(TileInfo(previousRowOffset + glm::vec3(tileSize, 0.0f, 0.0f), tileSize, tileSize));
+					}
+				}
+			}
+		}
+	}
 }

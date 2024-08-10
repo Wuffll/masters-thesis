@@ -2,6 +2,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include <FastNoiseLite/FastNoiseLite.h>
+
 #include <vector>
 #include <string>
 #include <filesystem>
@@ -41,12 +43,11 @@ int main(void)
 
     auto& camera = cameraController.getMutableCamera();
     camera.setShader(&defaultShader);
-    camera.move({ 0.0f, 20.0f, 0.0f });
-    camera.rotate({ 90.0f, 20.0f, 0.0f });
 
     glm::mat4 modelMat(1.0f);
 
-    TileManagerV2 manager({0.0f, 0.0f, 0.0f}, {32, 32});
+    TileV2::setNoiseType(FastNoiseLite::NoiseType_OpenSimplex2S);
+    TileManagerV2 manager({0.0f, 0.0f, 0.0f}, {128, 128});
 
     cameraController.addSubscriber(&manager);
     cameraController.setCameraPosition(manager.getCenter());

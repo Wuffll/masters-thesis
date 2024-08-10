@@ -22,24 +22,26 @@ VertexArray::~VertexArray()
 
 VertexArray::VertexArray(VertexArray&& other)
 	:
-	m_RendererID(std::move(other.m_RendererID)),
 	m_Layout(std::move(other.m_Layout)),
 	m_LayoutBuffersSeperated(std::move(other.m_LayoutBuffersSeperated)),
 	m_Usage(std::move(other.m_Usage)),
 	m_DrawingMode(std::move(other.m_DrawingMode))
 {
-	other.m_RendererID = 0;
+	unsigned int oldRendererID = m_RendererID;
+	m_RendererID = other.m_RendererID;
+	other.m_RendererID = oldRendererID;
 }
 
 VertexArray& VertexArray::operator=(VertexArray&& other)
 {
-	m_RendererID = std::move(other.m_RendererID);
 	m_Layout = std::move(other.m_Layout);
 	m_LayoutBuffersSeperated = std::move(other.m_LayoutBuffersSeperated);
 	m_Usage = std::move(other.m_Usage);
 	m_DrawingMode = std::move(other.m_DrawingMode);
 
-	other.m_RendererID = 0;
+	unsigned int oldRendererID = m_RendererID;
+	m_RendererID = other.m_RendererID;
+	other.m_RendererID = oldRendererID;
 
 	return *this;
 }

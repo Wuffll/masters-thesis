@@ -8,6 +8,8 @@ constexpr glm::vec3 DEFAULT_COLOR = {0.0f, 1.0f, 0.0f};
 
 constexpr int NUM_OF_INDICES_PER_SQUARE = 6;
 
+FastNoiseLite TileV2::noiseInstance = FastNoiseLite();
+
 TileV2::TileV2()
 	:
 	m_TileInfo({ DEFAULT_TILE_POS, DEFAULT_TILE_WIDTH, DEFAULT_TILE_DEPTH }),
@@ -77,6 +79,11 @@ TileV2& TileV2::operator=(TileV2&& other)
 	return *this;
 }
 
+void TileV2::setNoiseType(FastNoiseLite::NoiseType type)
+{
+	noiseInstance.SetNoiseType(type);
+}
+
 const TileInfo& TileV2::getTileInfo() const
 {
 	return m_TileInfo;
@@ -141,8 +148,12 @@ void TileV2::generateVertices()
 		{
 			VERTEX_FORMAT vertex;
 
-			vertex.first = startOffset + glm::vec3( x, 0.0f, z );
-			vertex.second = DEFAULT_COLOR;
+			float y = 0.0f;
+
+			y = noiseInstance.GetNoise(x + startOffset.x, z + startOffset.z) * 50.0f;
+
+			vertex.first = startOffset + glm::vec3( x, y, z );
+			vertex.second = {0.7f, y / 50.f, 0.5f};
 
 			m_Vertices[index] = std::move(vertex);
 

@@ -2,8 +2,9 @@
 
 #include <vector>
 
-#include "VertexFormatLayout.h"
+#include <FastNoiseLite/FastNoiseLite.h>
 
+#include "VertexFormatLayout.h"
 #include "VertexBufferGL.h"
 #include "IndexBufferGL.h"
 #include "VertexArray.h"
@@ -34,6 +35,8 @@ public:
 	TileV2(TileV2&& other);
 	TileV2& operator=(TileV2&& other);
 
+	static void setNoiseType(FastNoiseLite::NoiseType type);
+
 	const TileInfo& getTileInfo() const;
 
 	void changeStartOffset(glm::vec3 offset);
@@ -44,6 +47,8 @@ public:
 	void draw();
 
 private:
+
+	static FastNoiseLite noiseInstance;
 
 	void init();
 
