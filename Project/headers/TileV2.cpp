@@ -153,7 +153,7 @@ void TileV2::generateVertices()
 			y = noiseInstance.GetNoise(x + startOffset.x, z + startOffset.z) * 50.0f;
 
 			vertex.first = startOffset + glm::vec3( x, y, z );
-			vertex.second = {0.7f, y / 50.f, 0.5f};
+			vertex.second = {1.0f, y / 50.f, y / 50.f};
 
 			m_Vertices[index] = std::move(vertex);
 
